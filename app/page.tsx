@@ -97,17 +97,17 @@ export default function Dashboard() {
 
   const handleSubcategoryChange = async (value: string) => {
     setSelectedSubcategory(value)
-    setLoading(true)
+    // setLoading(true)
 
-    try {
-      const data = await fetchTableData(selectedCategory, value)
-      setTableData(data)
-      setShowSecondSection(true)
-    } catch (error) {
-      console.error("Error fetching data:", error)
-    } finally {
-      setLoading(false)
-    }
+    // try {
+    //   const data = await fetchTableData(selectedCategory, value)
+    //   setTableData(data)
+    //   setShowSecondSection(true)
+    // } catch (error) {
+    //   console.error("Error fetching data:", error)
+    // } finally {
+    //   setLoading(false)
+    // }
   }
 
   const handleDownload = () => {
@@ -124,6 +124,21 @@ export default function Dashboard() {
     document.body.appendChild(link)
     link.click()
     document.body.removeChild(link)
+  }
+
+  const handleFetchData = async () => {
+    if (!selectedCategory || !selectedSubcategory) return
+
+    setLoading(true)
+    try {
+      const data = await fetchTableData(selectedCategory, selectedSubcategory)
+      setTableData(data)
+      setShowSecondSection(true)
+    } catch (error) {
+      console.error("Error fetching data:", error)
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -147,7 +162,7 @@ export default function Dashboard() {
               <Separator className="mb-4" />
             </>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
               {/* Dropdown 1 */}
               <div className="space-y-2">
                 <label className="text-sm font-medium">Select Category</label>
@@ -185,6 +200,17 @@ export default function Dashboard() {
                       ))}
                   </SelectContent>
                 </Select>
+              </div>
+
+              {/* CTA Button */}
+              <div className="flex justify-center">
+                <Button
+                  onClick={handleFetchData}
+                  disabled={!selectedCategory || !selectedSubcategory || loading}
+                  className="w-full px-8 py-2"
+                >
+                  {loading ? "Loading..." : "Get Results"}
+                </Button>
               </div>
             </div>
 
