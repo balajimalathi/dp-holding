@@ -1,8 +1,8 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { User, MapPin, Calendar } from "lucide-react";
 
-// CSDL Holdings Component
-export const CSDLHoldings = ({ data }: { data: any }) => (
+// CDSL Holdings Component
+export const CDSLHoldings = ({ data }: { data: any }) => (
   <div className="space-y-4">
     {/* Account Info Card */}
     <Card className="bg-gradient-to-r from-green-50 to-emerald-50 border-green-200 p-0">

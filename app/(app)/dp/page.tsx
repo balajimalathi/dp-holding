@@ -10,15 +10,15 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Separator } from "@/components/ui/separator"
-import { Download, Building2, User, MapPin, Calendar } from "lucide-react"
+import { Download, Building2 } from "lucide-react"
 import Image from "next/image"
-import { CSDLHoldings } from "./_component/csdl.component"
+import { CDSLHoldings } from "./_component/cdsl.component"
 import { NSDLHoldings } from "./_component/nsdl.component"
 
 // Mock data for dropdowns
 const holdingOptions = [
   { value: "nsdl", label: "NSDL" },
-  { value: "csdl", label: "CSDL" },
+  { value: "cdsl", label: "CDSL" },
 ]
 
 const accountOptions = {
@@ -27,7 +27,7 @@ const accountOptions = {
     { value: "IN301774987654321", label: "IN301774987654321" },
     { value: "IN301774555666777", label: "IN301774555666777" },
   ],
-  csdl: [
+  cdsl: [
     { value: "10336632001234", label: "10336632001234" },
     { value: "10336632005678", label: "10336632005678" },
     { value: "10336632009876", label: "10336632009876" },
@@ -113,7 +113,7 @@ const fetchHoldingsData = async (holdings: string, accountNumber: string) => {
     }
   } else {
     return {
-      type: "csdl",
+      type: "cdsl",
       data: {
         holdings: [
           {
@@ -300,7 +300,7 @@ export default function Dp() {
           <CardHeader className="px-4">
             <CardTitle className="text-2xl font-bold text-center flex items-center justify-center gap-2">
               <Building2 className="h-6 w-6" />
-              Holdings Dashboard
+              Demat Holdings
             </CardTitle>
             <Separator className="mt-4" />
           </CardHeader>
@@ -314,7 +314,7 @@ export default function Dp() {
                     name="holdings"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Holdings Type</FormLabel>
+                        <FormLabel>Depository</FormLabel>
                         <Select value={field.value} onValueChange={handleHoldingsChange}>
                           <FormControl>
                             <SelectTrigger className="w-full">
@@ -393,7 +393,7 @@ export default function Dp() {
               </div>
             </CardHeader>
             <CardContent className="px-4">
-              {results.type === "nsdl" ? <NSDLHoldings data={results.data} /> : <CSDLHoldings data={results.data} />}
+              {results.type === "nsdl" ? <NSDLHoldings data={results.data} /> : <CDSLHoldings data={results.data} />}
             </CardContent>
           </Card>
         )}
