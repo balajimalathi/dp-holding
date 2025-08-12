@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Gabarito, Roboto } from "next/font/google";
+import { Gabarito } from "next/font/google";
 import "./globals.css";
 
 const roboto = Gabarito({

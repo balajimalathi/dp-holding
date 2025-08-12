@@ -23,9 +23,9 @@ export const NSDLHoldings = ({ data }: { data: any }) => (
       </CardContent>
     </Card>
 
-    {/* Holdings List */}
+    {/* Holdings List > index: number */}
     <div className="space-y-3">
-      {data.holdings.map((holding: any, index: number) => (
+      {data.holdings.map((holding: any) => (
         <Card key={holding.isin} className="border border-gray-200 hover:shadow-md transition-shadow p-0">
           <CardContent className="p-4">
             <div className="flex justify-between items-start mb-2">

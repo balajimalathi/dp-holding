@@ -48,6 +48,8 @@ type FormData = z.infer<typeof formSchema>
 const fetchHoldingsData = async (holdings: string, accountNumber: string) => {
   // Simulate API delay
   await new Promise((resolve) => setTimeout(resolve, 1000))
+  
+  console.log(accountNumber)
 
   if (holdings === "nsdl") {
     return {

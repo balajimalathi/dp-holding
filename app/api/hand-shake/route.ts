@@ -1,9 +1,10 @@
+import { env } from "@/env/server";
 import { decode, encode } from "@/lib/crypto";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   try {
-    let baseUrl = process.env.NEXT_PUBLIC_APP_URL;
+    const baseUrl = env.APP_URL;
     
     const body = await req.json();
     
