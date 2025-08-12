@@ -230,10 +230,10 @@ export default function Dp() {
                           <RadioGroup
                             onValueChange={handleHoldingsChange}
                             defaultValue={field.value}
-                            className="flex flex-col space-y-1"
+                            className="flex flex-row space-x-2"
                           >
                             {holdingOptions.map((option) => (
-                              <FormItem key={option.value} className="flex items-center space-x-3 space-y-0">
+                              <FormItem key={option.value} className="flex items-center space-x-1 space-y-0">
                                 <FormControl>
                                   <RadioGroupItem value={option.value} />
                                 </FormControl>
