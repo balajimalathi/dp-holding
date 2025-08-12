@@ -1,4 +1,5 @@
 import { Card, CardContent } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
 import { User, MapPin, Calendar } from "lucide-react";
 
 // CDSL Holdings Component
@@ -68,19 +69,22 @@ export const CDSLHoldings = ({ data }: { data: any }) => (
             <div className="flex justify-between items-start mb-2">
               <div className="flex-1">
                 <h4 className="font-semibold text-gray-900 text-md leading-tight">{holding.name}</h4>
-                <div className="flex gap-4 mt-1">
-                  <p className="text-sm text-gray-500">ISIN: {holding.isin}</p>
-                  <p className="text-sm text-gray-500">Code: {holding.code}</p>
-                </div>
+                <p className="text-sm text-gray-500 mt-1">ISIN: {holding.isin}</p>
               </div>
               <div className="text-right ml-4">
                 <p className="font-bold text-green-600">₹{holding.value.toLocaleString()}</p>
-                <p className="text-sm text-gray-500">{holding.quantity} units</p>
+                <p className="text-sm">{holding.quantity} units</p>
               </div>
             </div>
             <div className="flex justify-between text-sm text-gray-600">
-              <span>Type: {holding.holderType}</span>
-              <span>Value per unit: ₹{(holding.value / holding.quantity).toFixed(2)}</span>
+              <div className="flex flex-col">
+                <p className="text-black text-md">{holding.holderType}</p>
+                <Label className="text-xs">Type</Label>
+              </div>
+              <div className="flex flex-col">
+                <p className="text-black text-md">₹{(holding.value / holding.quantity).toFixed(2)}</p>
+                <Label className="text-xs">Value per unit</Label>
+              </div>
             </div>
           </CardContent>
         </Card>

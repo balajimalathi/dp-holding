@@ -2,6 +2,8 @@
 "use client"
 
 import { useState } from "react"
+import { downloadHoldings } from "@/lib/utils"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
@@ -186,100 +188,7 @@ export default function Dp() {
 
   const handleDownload = () => {
     if (!results) return
-
-    let csvContent = ""
-    if (results.type === "nsdl") {
-      csvContent =
-        "data:text/csv;charset=utf-8," +
-        "ISIN,Name,Quantity,Value\n" +
-        results.data.holdings.map((row: any) => `${row.isin},${row.name},${row.quantity},${row.value}`).join("\n")
-    } else {
-      csvContent =
-        "data:text/csv;charset=utf-8," +
-        "Code,ISIN,Name,Holder Type,Quantity,Value\n" +
-        results.data.holdings
-          .map((row: any) => `${row.code},${row.isin},${row.name},${row.holderType},${row.quantity},${row.value}`)
-          .join("\n")
-    }
-
-    const encodedUri = encodeURI(csvContent)
-    const link = document.createElement("a")
-    link.setAttribute("href", encodedUri)
-    link.setAttribute("download", `${results.type}_holdings.csv`)
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-  }
-
-  const handlePrint = () => {
-    if (!results) return
-
-    const printContent = `
-      <html>
-        <head><title>${results.type.toUpperCase()} Holdings Report</title></head>
-        <body>
-          <h1>${results.type.toUpperCase()} Holdings Report</h1>
-          ${results.type === "nsdl"
-        ? `
-            <p><strong>Total Value:</strong> ₹${results.data.totalValue.toLocaleString()}</p>
-            <p><strong>As on Date:</strong> ${results.data.asOnDate}</p>
-            <table border="1" style="border-collapse: collapse; width: 100%;">
-              <thead>
-                <tr><th>ISIN</th><th>Name</th><th>Quantity</th><th>Value</th></tr>
-              </thead>
-              <tbody>
-                ${results.data.holdings
-          .map(
-            (row: any) => `
-                  <tr>
-                    <td>${row.isin}</td>
-                    <td>${row.name}</td>
-                    <td>${row.quantity}</td>
-                    <td>₹${row.value}</td>
-                  </tr>
-                `,
-          )
-          .join("")}
-              </tbody>
-            </table>
-          `
-        : `
-            <p><strong>Account:</strong> ${results.data.account.name} (${results.data.account.dpId})</p>
-            <p><strong>Total Value:</strong> ₹${results.data.summary.totalValue.toLocaleString()}</p>
-            <p><strong>Date:</strong> ${results.data.summary.date}</p>
-            <table border="1" style="border-collapse: collapse; width: 100%;">
-              <thead>
-                <tr><th>Code</th><th>ISIN</th><th>Name</th><th>Type</th><th>Quantity</th><th>Value</th></tr>
-              </thead>
-              <tbody>
-                ${results.data.holdings
-          .map(
-            (row: any) => `
-                  <tr>
-                    <td>${row.code}</td>
-                    <td>${row.isin}</td>
-                    <td>${row.name}</td>
-                    <td>${row.holderType}</td>
-                    <td>${row.quantity}</td>
-                    <td>₹${row.value}</td>
-                  </tr>
-                `,
-          )
-          .join("")}
-              </tbody>
-            </table>
-          `
-      }
-        </body>
-      </html>
-    `
-
-    const printWindow = window.open("", "_blank")
-    if (printWindow) {
-      printWindow.document.write(printContent)
-      printWindow.document.close()
-      printWindow.print()
-    }
+    downloadHoldings(results)
   }
 
   return (
@@ -294,7 +203,7 @@ export default function Dp() {
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 container mx-auto px-4 py-8">
+      <main className="flex-1 container mx-auto px-2 py-8">
         {/* First Section */}
         <Card className="mb-8">
           <CardHeader className="px-4">
@@ -313,22 +222,26 @@ export default function Dp() {
                     control={form.control}
                     name="holdings"
                     render={({ field }) => (
-                      <FormItem>
+                      <FormItem className="space-y-3">
                         <FormLabel>Depository</FormLabel>
-                        <Select value={field.value} onValueChange={handleHoldingsChange}>
-                          <FormControl>
-                            <SelectTrigger className="w-full">
-                              <SelectValue placeholder="Choose holdings type" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
+                        <FormControl>
+                          <RadioGroup
+                            onValueChange={handleHoldingsChange}
+                            defaultValue={field.value}
+                            className="flex flex-col space-y-1"
+                          >
                             {holdingOptions.map((option) => (
-                              <SelectItem key={option.value} value={option.value}>
-                                {option.label}
-                              </SelectItem>
+                              <FormItem key={option.value} className="flex items-center space-x-3 space-y-0">
+                                <FormControl>
+                                  <RadioGroupItem value={option.value} />
+                                </FormControl>
+                                <FormLabel className="font-normal">
+                                  {option.label}
+                                </FormLabel>
+                              </FormItem>
                             ))}
-                          </SelectContent>
-                        </Select>
+                          </RadioGroup>
+                        </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
@@ -385,10 +298,6 @@ export default function Dp() {
                     <Download className="h-4 w-4 mr-2" />
                     Download
                   </Button>
-                  {/* <Button onClick={handlePrint} variant="outline" size="sm">
-                    <Printer className="h-4 w-4 mr-2" />
-                    Print
-                  </Button> */}
                 </div>
               </div>
             </CardHeader>

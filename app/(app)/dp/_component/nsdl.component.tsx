@@ -1,4 +1,5 @@
 import { Card, CardContent } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
 import { Calendar } from "lucide-react";
 
 // NSDL Holdings Component
@@ -38,8 +39,14 @@ export const NSDLHoldings = ({ data }: { data: any }) => (
               </div>
             </div>
             <div className="flex justify-between text-sm text-gray-600">
-              <span>Qty: {holding.quantity}</span>
-              <span>Value per unit: ₹{(holding.value / holding.quantity).toFixed(2)}</span>
+              <div className="flex flex-col">
+                <p className="text-black text-md">{holding.quantity}</p>
+                <Label className="text-xs">Quantity</Label>
+              </div>
+              <div className="flex flex-col">
+                <p className="text-black text-md">₹{(holding.value / holding.quantity).toFixed(2)}</p>
+                <Label className="text-xs">Value per unit</Label>
+              </div>
             </div>
           </CardContent>
         </Card>
