@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useState } from "react"
@@ -9,8 +10,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Separator } from "@/components/ui/separator"
-import { Download, Printer, Building2, User, MapPin, Calendar } from "lucide-react"
+import { Download, Building2, User, MapPin, Calendar } from "lucide-react"
 import Image from "next/image"
+import { CSDLHoldings } from "./_component/csdl.component"
+import { NSDLHoldings } from "./_component/nsdl.component"
 
 // Mock data for dropdowns
 const holdingOptions = [
@@ -148,135 +151,7 @@ const fetchHoldingsData = async (holdings: string, accountNumber: string) => {
   }
 }
 
-// NSDL Holdings Component
-const NSDLHoldings = ({ data }: { data: any }) => (
-  <div className="space-y-4">
-    {/* Summary Card */}
-    <Card className="bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200">
-      <CardContent className="p-4">
-        <div className="flex justify-between items-center">
-          <div>
-            <h3 className="text-lg font-semibold text-blue-900">Total Portfolio Value</h3>
-            <p className="text-2xl font-bold text-blue-700">₹{data.totalValue.toLocaleString()}</p>
-          </div>
-          <div className="text-right">
-            <p className="text-sm text-blue-600 flex items-center gap-1">
-              <Calendar className="h-4 w-4" />
-              As on {data.asOnDate}
-            </p>
-          </div>
-        </div>
-      </CardContent>
-    </Card>
-
-    {/* Holdings List */}
-    <div className="space-y-3">
-      {data.holdings.map((holding: any, index: number) => (
-        <Card key={holding.isin} className="border border-gray-200 hover:shadow-md transition-shadow">
-          <CardContent className="p-4">
-            <div className="flex justify-between items-start mb-2">
-              <div className="flex-1">
-                <h4 className="font-semibold text-gray-900 text-sm leading-tight">{holding.name}</h4>
-                <p className="text-xs text-gray-500 mt-1">ISIN: {holding.isin}</p>
-              </div>
-              <div className="text-right ml-4">
-                <p className="font-bold text-green-600">₹{holding.value.toLocaleString()}</p>
-                <p className="text-xs text-gray-500">{holding.quantity} units</p>
-              </div>
-            </div>
-            <div className="flex justify-between text-xs text-gray-600">
-              <span>Qty: {holding.quantity}</span>
-              <span>Value per unit: ₹{(holding.value / holding.quantity).toFixed(2)}</span>
-            </div>
-          </CardContent>
-        </Card>
-      ))}
-    </div>
-  </div>
-)
-
-// CSDL Holdings Component
-const CSDLHoldings = ({ data }: { data: any }) => (
-  <div className="space-y-4">
-    {/* Account Info Card */}
-    <Card className="bg-gradient-to-r from-green-50 to-emerald-50 border-green-200">
-      <CardContent className="p-4">
-        <div className="flex items-start gap-3">
-          <User className="h-5 w-5 text-green-600 mt-1" />
-          <div className="flex-1">
-            <h3 className="font-semibold text-green-900">{data.account.name}</h3>
-            <p className="text-sm text-green-700">DP ID: {data.account.dpId}</p>
-            <div className="flex items-start gap-1 mt-2">
-              <MapPin className="h-4 w-4 text-green-600 mt-0.5" />
-              <div className="text-sm text-green-600">
-                {data.account.address.map((line: string, index: number) => (
-                  <div key={index}>{line}</div>
-                ))}
-              </div>
-            </div>
-          </div>
-          <div className="text-right">
-            <div className="flex gap-2 text-xs">
-              <span
-                className={`px-2 py-1 rounded-full ${data.account.status === "Active" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}`}
-              >
-                {data.account.status}
-              </span>
-            </div>
-            <p className="text-xs text-green-600 mt-1">{data.account.boCategory}</p>
-          </div>
-        </div>
-      </CardContent>
-    </Card>
-
-    {/* Summary Card */}
-    <Card className="bg-gradient-to-r from-purple-50 to-pink-50 border-purple-200">
-      <CardContent className="p-4">
-        <div className="flex justify-between items-center">
-          <div>
-            <h3 className="text-lg font-semibold text-purple-900">Total Portfolio Value</h3>
-            <p className="text-2xl font-bold text-purple-700">₹{data.summary.totalValue.toLocaleString()}</p>
-          </div>
-          <div className="text-right">
-            <p className="text-sm text-purple-600 flex items-center gap-1">
-              <Calendar className="h-4 w-4" />
-              As on {data.summary.date}
-            </p>
-          </div>
-        </div>
-      </CardContent>
-    </Card>
-
-    {/* Holdings List */}
-    <div className="space-y-3">
-      {data.holdings.map((holding: any, index: number) => (
-        <Card key={`${holding.isin}-${index}`} className="border border-gray-200 hover:shadow-md transition-shadow">
-          <CardContent className="p-4">
-            <div className="flex justify-between items-start mb-2">
-              <div className="flex-1">
-                <h4 className="font-semibold text-gray-900 text-sm leading-tight">{holding.name}</h4>
-                <div className="flex gap-4 mt-1">
-                  <p className="text-xs text-gray-500">ISIN: {holding.isin}</p>
-                  <p className="text-xs text-gray-500">Code: {holding.code}</p>
-                </div>
-              </div>
-              <div className="text-right ml-4">
-                <p className="font-bold text-green-600">₹{holding.value.toLocaleString()}</p>
-                <p className="text-xs text-gray-500">{holding.quantity} units</p>
-              </div>
-            </div>
-            <div className="flex justify-between text-xs text-gray-600">
-              <span>Type: {holding.holderType}</span>
-              <span>Value per unit: ₹{(holding.value / holding.quantity).toFixed(2)}</span>
-            </div>
-          </CardContent>
-        </Card>
-      ))}
-    </div>
-  </div>
-)
-
-export default function Dashboard() {
+export default function Dp() {
   const [results, setResults] = useState<any>(null)
   const [showResults, setShowResults] = useState(false)
 
@@ -422,14 +297,14 @@ export default function Dashboard() {
       <main className="flex-1 container mx-auto px-4 py-8">
         {/* First Section */}
         <Card className="mb-8">
-          <CardHeader>
+          <CardHeader className="px-4">
             <CardTitle className="text-2xl font-bold text-center flex items-center justify-center gap-2">
               <Building2 className="h-6 w-6" />
               Holdings Dashboard
             </CardTitle>
             <Separator className="mt-4" />
           </CardHeader>
-          <CardContent>
+          <CardContent className="px-4">
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
@@ -502,22 +377,22 @@ export default function Dashboard() {
         {/* Second Section */}
         {showResults && results && (
           <Card>
-            <CardHeader>
-              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <CardHeader className="px-4">
+              <div className="flex flex-row sm:flex-row justify-between items-start sm:items-center gap-4">
                 <CardTitle className="text-xl font-bold">{results.type.toUpperCase()} Holdings</CardTitle>
                 <div className="flex gap-2">
                   <Button onClick={handleDownload} variant="outline" size="sm">
                     <Download className="h-4 w-4 mr-2" />
                     Download
                   </Button>
-                  <Button onClick={handlePrint} variant="outline" size="sm">
+                  {/* <Button onClick={handlePrint} variant="outline" size="sm">
                     <Printer className="h-4 w-4 mr-2" />
                     Print
-                  </Button>
+                  </Button> */}
                 </div>
               </div>
             </CardHeader>
-            <CardContent>
+            <CardContent className="px-4">
               {results.type === "nsdl" ? <NSDLHoldings data={results.data} /> : <CSDLHoldings data={results.data} />}
             </CardContent>
           </Card>
