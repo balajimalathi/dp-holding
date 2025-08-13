@@ -2,6 +2,7 @@ import { env } from "@/env/server";
 import { decode, encode } from "@/lib/crypto";
 import { generatePdf } from "@/lib/generatePdf";
 import { renderPdf } from "@/lib/report/cdsl.report";
+import { cdslData } from "@/types/cdsl";
 import { NextResponse } from "next/server";
 
 export async function GET(req: Request) {
@@ -9,17 +10,7 @@ export async function GET(req: Request) {
     const { searchParams } = new URL(req.url);
     const documentId = searchParams.get('id') || 'default-id';
     
-    const documentData = {
-      title: "Sample Document",
-      description: "This is a sample document description"
-    };
-    
-    const userData = {
-      name: "John Doe",
-      email: "john@example.com"
-    };
-    
-    const htmlContent = await renderPdf(documentData, userData);
+    const htmlContent = await renderPdf(cdslData);
     const pdfBuffer = await generatePdf(htmlContent, documentId);
     
     const buffer = Buffer.from(pdfBuffer);

@@ -16,6 +16,7 @@ import { Download, Building2 } from "lucide-react"
 import Image from "next/image"
 import { CDSLHoldings } from "./_component/cdsl.component"
 import { NSDLHoldings } from "./_component/nsdl.component"
+import { cdslData } from "@/types/cdsl"
 
 // Mock data for dropdowns
 const holdingOptions = [
@@ -118,39 +119,7 @@ const fetchHoldingsData = async (holdings: string, accountNumber: string) => {
   } else {
     return {
       type: "cdsl",
-      data: {
-        holdings: [
-          {
-            code: "01",
-            isin: "INE208A01029",
-            name: "ASHOK LEYLAND LIMITED - EQ NEW FV RE.1/-",
-            holderType: "Beneficiary",
-            quantity: 35,
-            value: 8013.6,
-          },
-          {
-            code: "01",
-            isin: "INE02RE01045",
-            name: "BRAINBEES SOLUTIONS LIMITED - EQ NEW FV Rs.2/-",
-            holderType: "Beneficiary",
-            quantity: 32,
-            value: 18796.8,
-          },
-        ],
-        summary: {
-          date: "10-12-2024",
-          totalValue: 1010749.26,
-        },
-        account: {
-          dpId: "10336632",
-          name: "BELSON P KURIAN",
-          address: ["PAZHAYAMPILLIL HOUSE", "SANTHIPURAM", "PERUVA P O", "KOTTAYAM, KERALA"],
-          status: "Active",
-          nri: "NO",
-          freeze: "NO",
-          boCategory: "Resident",
-        },
-      },
+      data: cdslData,
     }
   }
 }

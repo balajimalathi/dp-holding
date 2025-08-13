@@ -1,10 +1,8 @@
 import React from "react";
 const { renderToString } = await import("react-dom/server");
-import { DocumentData, UserData } from "../../components/template/DocumentTemplate";
-import DocumentTemplate from "../../components/template/DocumentTemplate";
+import CdslTemplate from "../../components/template/cdslTemplate";
+import { Cdsl } from "@/types/cdsl";
 
-
-export const renderPdf = async (documentData: DocumentData,
-  userData: UserData) => {
-  return renderToString(<DocumentTemplate documentData={ documentData } userData = { userData } />);
+export const renderPdf = async (data: Cdsl) => {
+  return renderToString(<CdslTemplate data={ data } />);
 };
