@@ -14,7 +14,7 @@ import { Download, Building2 } from "lucide-react"
 import Image from "next/image"
 import { CDSLHoldings } from "./_component/cdsl.component"
 import { NSDLHoldings } from "./_component/nsdl.component"
-import { cdslData } from "@/types/cdsl"
+// import { cdslData } from "@/types/cdsl"
 import { nsdlData } from "@/types/nsdl"
 
 // Mock data for dropdowns
@@ -59,7 +59,7 @@ const fetchHoldingsData = async (holdings: string, accountNumber: string) => {
   } else {
     return {
       type: "cdsl",
-      data: cdslData,
+      data: "",
     }
   }
 }

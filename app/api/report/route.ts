@@ -1,7 +1,7 @@
 import { generatePdf } from "@/lib/generatePdf";
 import { renderNsdlPdf, renderCdslPdf } from "@/lib/report/cdsl.report";
-import { cdslData } from "@/types/cdsl";
-import { nsdlData } from "@/types/nsdl";
+// import { cdslData } from "@/types/cdsl";
+// import { nsdlData } from "@/types/nsdl";
 import { NextResponse } from "next/server";
 
 export async function GET(req: Request) {
@@ -20,11 +20,11 @@ export async function GET(req: Request) {
     let htmlContent = "<div></div>";
 
     if (holding === 'nsdl') {
-      htmlContent = await renderNsdlPdf(nsdlData);
+      // htmlContent = await renderNsdlPdf(nsdlData);
     }
 
     if (holding === 'cdsl') {
-      htmlContent = await renderCdslPdf(cdslData);
+      // htmlContent = await renderCdslPdf(cdslData);
     }
 
     const pdfBuffer = await generatePdf(htmlContent, documentId);

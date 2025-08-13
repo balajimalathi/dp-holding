@@ -27,43 +27,6 @@ Alright — here’s a breakdown of what’s happening in both sections, with so
 
 ### **Android**
 
-### **Flutter**
-
-Your Dart/Flutter snippet is using the [`flutter_inappwebview`](https://pub.dev/packages/flutter_inappwebview) plugin to load HTML/JS content inside a mobile app and call JavaScript functions from Dart.
-
-```dart
-InAppWebView(
-  initialFile: widget.url, // Loads a local HTML file or remote page
-  onWebViewCreated: (controller) async {
-    _controller = controller; // Store the controller for later
-
-    // Immediately call a JavaScript function in the web page
-    await controller.evaluateJavascript(
-      source: "window.getDpHolding('<customerId>');",
-    );
-  },
-  onLoadStop: (controller, url) async {
-    // After the page finishes loading, call the same JS function again
-    await controller.evaluateJavascript(
-      source: "window.getDpHolding('<customerId>');",
-    );
-  },
-)
-```
-
-**Key points:**
-
-* **`initialFile: widget.url`** — You’re loading either a local HTML file or remote URL passed into the widget.
-* **`onWebViewCreated`** — Runs when the WebView is initialized.
-  You use `evaluateJavascript` here to call a JavaScript function `getDpHolding` with a `customerId` parameter right away.
-* **`onLoadStop`** — Runs when the page has fully loaded.
-  You call `getDpHolding` again to ensure it executes after all assets are ready (useful if the function wasn’t available at `onWebViewCreated` time).
-* **`window.getDpHolding()`** — This assumes your loaded page has a JS function defined in the global `window` object.
-
-💡 *This is a standard way to bridge native Flutter code ↔ JavaScript code in a WebView.*
-
----
-
 ## **Docker Commands**
 
 This is your containerization workflow for running the Next.js (or other Node-based) app.
