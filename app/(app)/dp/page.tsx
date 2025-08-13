@@ -188,9 +188,26 @@ export default function Dp() {
     }
   }
 
-  const handleDownload = () => {
+  const handleDownload = async () => {
     if (!results) return
-    downloadHoldings(results)
+    
+    try {
+      const response = await fetch(`/api/report?id=${results.type}-${Date.now()}`)
+      if (!response.ok) throw new Error('Failed to generate report')
+      
+      const blob = await response.blob()
+      const url = window.URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `holdings-report-${results.type}-${new Date().toISOString().slice(0,10)}.pdf`
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+      window.URL.revokeObjectURL(url)
+    } catch (error) {
+      console.error('Download failed:', error)
+      alert('Failed to download report. Please try again.')
+    }
   }
 
   return (
@@ -199,7 +216,7 @@ export default function Dp() {
       <header className="bg-white shadow-sm border-b">
         <div className="container mx-auto px-4 py-4">
           <div className="flex justify-center">
-            <Image src="/generic-company-logo.png" alt="Company Logo" width={200} height={60} className="h-12 w-auto" />
+            <Image src="/logo.png" alt="Company Logo" width={200} height={60} className="h-12 w-auto" />
           </div>
         </div>
       </header>
@@ -314,7 +331,7 @@ export default function Dp() {
       <footer className="bg-white border-t mt-auto">
         <div className="container mx-auto px-4 py-6">
           <div className="flex justify-center">
-            <Image src="/footer-logo.png" alt="Footer Logo" width={150} height={40} className="h-8 w-auto opacity-60" />
+            <Image src="/logo.png" alt="Footer Logo" width={150} height={40} className="h-8 w-auto opacity-60" />
           </div>
         </div>
       </footer>
