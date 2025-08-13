@@ -1,8 +1,6 @@
-
 "use client"
 
 import { useState } from "react"
-import { downloadHoldings } from "@/lib/utils"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -17,6 +15,7 @@ import Image from "next/image"
 import { CDSLHoldings } from "./_component/cdsl.component"
 import { NSDLHoldings } from "./_component/nsdl.component"
 import { cdslData } from "@/types/cdsl"
+import { nsdlData } from "@/types/nsdl"
 
 // Mock data for dropdowns
 const holdingOptions = [
@@ -49,72 +48,13 @@ type FormData = z.infer<typeof formSchema>
 const fetchHoldingsData = async (holdings: string, accountNumber: string) => {
   // Simulate API delay
   await new Promise((resolve) => setTimeout(resolve, 1000))
-  
+
   console.log(accountNumber)
 
   if (holdings === "nsdl") {
     return {
       type: "nsdl",
-      data: {
-        holdings: [
-          {
-            isin: "INE263A01024",
-            name: "BHARAT ELECTRONIC- EQ",
-            quantity: 6,
-            value: 1887,
-          },
-          {
-            isin: "INE171A01029",
-            name: "FEDERAL BANK EQ 2/-",
-            quantity: 1996,
-            value: 426645,
-          },
-          {
-            isin: "IN0020220045",
-            name: "GOI SGB 31724 2030",
-            quantity: 1,
-            value: 8178,
-          },
-          {
-            isin: "INE251H01024",
-            name: "GVK POWER - EQ RE 1",
-            quantity: 94,
-            value: 474,
-          },
-          {
-            isin: "INE335Y01020",
-            name: "IRCTCL-EQ2/-",
-            quantity: 35,
-            value: 29162,
-          },
-          {
-            isin: "INE146L01010",
-            name: "KIRLOSKAR OIL ENG- EQ",
-            quantity: 70,
-            value: 82408,
-          },
-          {
-            isin: "INE683A01023",
-            name: "SOUTH INDIAN-EQ 1/-",
-            quantity: 182,
-            value: 4778,
-          },
-          {
-            isin: "INE398A01010",
-            name: "VENKY'(INDIA) EQTY",
-            quantity: 10,
-            value: 18145,
-          },
-          {
-            isin: "INE528G01035",
-            name: "YES BANK LTD-EQ2/-",
-            quantity: 10,
-            value: 218,
-          },
-        ],
-        totalValue: 571893.98,
-        asOnDate: "09-DEC-2024",
-      },
+      data: nsdlData,
     }
   } else {
     return {
@@ -159,16 +99,16 @@ export default function Dp() {
 
   const handleDownload = async () => {
     if (!results) return
-    
+
     try {
-      const response = await fetch(`/api/report?id=${results.type}-${Date.now()}`)
+      const response = await fetch(`/api/report?holding=${selectedHoldings}&id=${results.type}-${Date.now()}`)
       if (!response.ok) throw new Error('Failed to generate report')
-      
+
       const blob = await response.blob()
       const url = window.URL.createObjectURL(blob)
       const a = document.createElement('a')
       a.href = url
-      a.download = `holdings-report-${results.type}-${new Date().toISOString().slice(0,10)}.pdf`
+      a.download = `holdings-report-${results.type}-${new Date().toISOString().slice(0, 10)}.pdf`
       document.body.appendChild(a)
       a.click()
       document.body.removeChild(a)
@@ -210,9 +150,9 @@ export default function Dp() {
                     control={form.control}
                     name="holdings"
                     render={({ field }) => (
-                      <FormItem className="space-y-3">
+                      <FormItem className="flex flex-col">
                         <FormLabel>Depository</FormLabel>
-                        <FormControl>
+                        <FormControl className="py-2">
                           <RadioGroup
                             onValueChange={handleHoldingsChange}
                             defaultValue={field.value}
