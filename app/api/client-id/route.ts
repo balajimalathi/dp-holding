@@ -64,6 +64,8 @@ export async function POST(req: Request) {
       ResponseDateTime: "2025-08-07T00:00:00+05:30",
       Status: "S",
       Description: "Success",
+      // CDSL_Response: null,
+      // NSDL_Response: null
       CDSL_Response: {
         Depository: "CDSL",
         Response: "Y~000034~1308730000011320~1308730000011316"
@@ -74,14 +76,18 @@ export async function POST(req: Request) {
       }
     }
 
-    const cdslClients = parseClientId(response.CDSL_Response.Response);
-    const nsdlClients = parseClientId(response.NSDL_Response.Response);
-    response.CDSL_Response.parsed = cdslClients;
-    response.NSDL_Response.parsed = nsdlClients;
+    if (response.CDSL_Response) {
+      const cdslClients = parseClientId(response.CDSL_Response?.Response);
+      response.parsedCdsl = cdslClients;
+    }
 
-    return NextResponse.json(
-      response
-    );
+    if (response.NSDL_Response) {
+      const nsdlClients = parseClientId(response.NSDL_Response?.Response);
+      response.parsedNsdl = nsdlClients;
+    }
+
+    return NextResponse.json(response);
+
   } catch (error: any) {
     return NextResponse.json({ status: 500, error });
   }

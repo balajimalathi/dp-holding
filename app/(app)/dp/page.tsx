@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -14,27 +14,6 @@ import { Download, Building2 } from "lucide-react"
 import Image from "next/image"
 import { CDSLHoldings } from "./_component/cdsl.component"
 import { NSDLHoldings } from "./_component/nsdl.component"
-// import { cdslData } from "@/types/cdsl"
-import { nsdlData } from "@/types/nsdl"
-
-// Mock data for dropdowns
-const holdingOptions = [
-  { value: "nsdl", label: "NSDL" },
-  { value: "cdsl", label: "CDSL" },
-]
-
-const accountOptions = {
-  nsdl: [
-    { value: "IN301774123456789", label: "IN301774123456789" },
-    { value: "IN301774987654321", label: "IN301774987654321" },
-    { value: "IN301774555666777", label: "IN301774555666777" },
-  ],
-  cdsl: [
-    { value: "10336632001234", label: "10336632001234" },
-    { value: "10336632005678", label: "10336632005678" },
-    { value: "10336632009876", label: "10336632009876" },
-  ],
-}
 
 // Zod validation schema
 const formSchema = z.object({
@@ -44,25 +23,6 @@ const formSchema = z.object({
 
 type FormData = z.infer<typeof formSchema>
 
-// Mock API function
-const fetchHoldingsData = async (holdings: string, accountNumber: string) => {
-  // Simulate API delay
-  await new Promise((resolve) => setTimeout(resolve, 1000))
-
-  console.log(accountNumber)
-
-  if (holdings === "nsdl") {
-    return {
-      type: "nsdl",
-      data: nsdlData,
-    }
-  } else {
-    return {
-      type: "cdsl",
-      data: "",
-    }
-  }
-}
 
 export default function Dp() {
   const [results, setResults] = useState<any>(null)
@@ -116,6 +76,99 @@ export default function Dp() {
     } catch (error) {
       console.error('Download failed:', error)
       alert('Failed to download report. Please try again.')
+    }
+  }
+
+
+  // Account options from API response
+  const [accountOptions, setAccountOptions] = useState<{
+    cdsl: { value: string; label: string }[]
+    nsdl: { value: string; label: string }[]
+  }>({ cdsl: [], nsdl: [] })
+
+  // Holdings options
+  const [holdingOptions, setHoldingOptions] = useState<{
+    value: string; label: string
+  }[]>([])
+
+
+  // [
+  //   { value: 'cdsl', label: 'CDSL' },
+  //   { value: 'nsdl', label: 'NSDL' }
+  // ]
+
+  // { value: 'cdsl', label: 'CDSL' },
+  // { value: 'nsdl', label: 'NSDL' }
+
+  // Fetch client IDs on component mount
+  useEffect(() => {
+    const fetchClientIds = async () => {
+      try {
+        const response = await fetch('/api/client-id', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ cusId: '118877875' }) // TODO: Replace with actual customer ID
+        })
+
+        const data = await response.json()
+
+        var options: any[] = []
+
+        if (data.CDSL_Response) {
+          options.push({ value: 'cdsl', label: 'CDSL' })
+        }
+
+        if (data.NSDL_Response) {
+          options.push({ value: 'nsdl', label: 'NSDL' })
+        }
+
+        setHoldingOptions(options)
+
+        setAccountOptions({
+          cdsl: data.parsedCdsl?.clientId.map((id: string) => ({
+            value: id,
+            label: id
+          })),
+          nsdl: data.parsedNsdl?.clientId.map((id: string) => ({
+            value: id,
+            label: id
+          }))
+        })
+      } catch (error) {
+        console.error('Error fetching client IDs:', error)
+      }
+    }
+
+    fetchClientIds()
+  }, [])
+
+
+
+  // Fetch holdings data from API
+  const fetchHoldingsData = async (holdings: string, accountNumber: string) => {
+    try {
+      const response = await fetch('/api/holding', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          depository: holdings.toUpperCase(),
+          dpClientId: accountNumber
+        })
+      })
+
+      const data = await response.json()
+
+      return {
+        type: holdings,
+        data: data.parsed
+      }
+    } catch (error) {
+      console.error('Error fetching holdings:', error)
+      throw error
     }
   }
 

@@ -7,20 +7,20 @@ export interface ClientInfo {
   ResponseDateTime: string
   Status: string
   Description: string
-  CDSL_Response: CdslResponse
-  NSDL_Response: NsdlResponse
+  CDSL_Response?: CdslResponse | null
+  parsedCdsl?: ClientIds | null
+  NSDL_Response?: NsdlResponse | null
+  parsedNsdl?: ClientIds | null
 }
 
 export interface CdslResponse {
   Depository: string
   Response: string
-  parsed?: ClientIds
 }
 
 export interface NsdlResponse {
   Depository: string
   Response: string
-  parsed?: ClientIds
 }
 
 export interface ClientIds {
