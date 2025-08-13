@@ -71,17 +71,17 @@ This is your containerization workflow for running the Next.js (or other Node-ba
 **Build the Docker image**
 
 ```bash
-docker build -t dp-holding .
+docker build -t fedmob-dp-holding .
 ```
 
 * `docker build` → creates a Docker image from your `Dockerfile`.
-* `-t dp-holding` → names (tags) the image as `dp-holding`.
+* `-t fedmob-dp-holding` → names (tags) the image as `fedmob-dp-holding`.
 * `.` → tells Docker to use the current directory as the build context.
 
 **Run the image in a container**
 
 ```bash
-docker run -p 3000:3000 dp-holding
+docker run -p 3000:3000 fedmob-dp-holding
 ```
 
 * `docker run` → starts a container from an image.
