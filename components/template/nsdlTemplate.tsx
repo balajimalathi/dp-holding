@@ -19,7 +19,7 @@ export default function NsdlTemplate({
       {/* Bank Info */}
       <div className="text-center mb-6">
         <p className="font-bold">THE FEDERAL BANK LIMITED</p>
-        <p>CDSL DP ID: {data.dpClientId}</p>
+        <p>NSDL DP ID: {data.dpClientId}</p>
         <p>Depository Services Division</p>
         <p>
           Operations Department, III Floor <br />

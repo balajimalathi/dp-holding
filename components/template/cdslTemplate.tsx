@@ -8,7 +8,7 @@ export default function CdslTemplate({
 }) {
   return (
 
-        <div className="p-8 bg-gray-50 min-h-screen text-sm">
+    <div className="p-8 bg-gray-50 min-h-screen text-sm">
       <div className="text-center mb-4">
         <img
           src="/logo.png"
@@ -20,7 +20,7 @@ export default function CdslTemplate({
       {/* Bank Info */}
       <div className="text-center mb-6">
         <p className="font-bold">THE FEDERAL BANK LIMITED</p>
-        <p>NSDL DP ID: {data.dpClientId}</p>
+        <p>CDSL DP ID: {data.dpClientId}</p>
         <p>Depository Services Division</p>
         <p>
           Operations Department, III Floor <br />

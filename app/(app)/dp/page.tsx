@@ -61,7 +61,15 @@ export default function Dp() {
     if (!results) return
 
     try {
-      const response = await fetch(`/api/report?holding=${selectedHoldings}&id=${results.type}-${Date.now()}`)
+
+      const response = await fetch(`/api/report?holding=${selectedHoldings}&id=${results.type}-${Date.now()}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(results) // TODO: Replace with actual customer ID
+      })
+
       if (!response.ok) throw new Error('Failed to generate report')
 
       const blob = await response.blob()
@@ -79,7 +87,6 @@ export default function Dp() {
     }
   }
 
-
   // Account options from API response
   const [accountOptions, setAccountOptions] = useState<{
     cdsl: { value: string; label: string }[]
@@ -91,14 +98,6 @@ export default function Dp() {
     value: string; label: string
   }[]>([])
 
-
-  // [
-  //   { value: 'cdsl', label: 'CDSL' },
-  //   { value: 'nsdl', label: 'NSDL' }
-  // ]
-
-  // { value: 'cdsl', label: 'CDSL' },
-  // { value: 'nsdl', label: 'NSDL' }
 
   // Fetch client IDs on component mount
   useEffect(() => {

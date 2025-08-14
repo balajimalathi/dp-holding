@@ -1,14 +1,16 @@
 import { generatePdf } from "@/lib/generatePdf";
 import { renderNsdlPdf, renderCdslPdf } from "@/lib/report/cdsl.report";
-// import { cdslData } from "@/types/cdsl";
-// import { nsdlData } from "@/types/nsdl";
+import { mockCdsl } from "@/types/cdsl";
+import { mockNsdl } from "@/types/nsdl";
 import { NextResponse } from "next/server";
 
-export async function GET(req: Request) {
+export async function POST(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
     const documentId = searchParams.get('id') || 'default-id';
     const holding = searchParams.get('holding') || '';
+
+    const body = await req.json();
 
     if (!['nsdl', 'cdsl'].includes(holding)) {
       return NextResponse.json(
@@ -20,11 +22,11 @@ export async function GET(req: Request) {
     let htmlContent = "<div></div>";
 
     if (holding === 'nsdl') {
-      // htmlContent = await renderNsdlPdf(nsdlData);
+      htmlContent = await renderNsdlPdf(body.data);
     }
 
     if (holding === 'cdsl') {
-      // htmlContent = await renderCdslPdf(cdslData);
+      htmlContent = await renderCdslPdf(body.data);
     }
 
     const pdfBuffer = await generatePdf(htmlContent, documentId);

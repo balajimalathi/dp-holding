@@ -42,14 +42,10 @@
 //    "Description": "Success"
 // }
 
-
-
 import { env } from "@/env/server";
-import { parseCDSL, parseClientId, parseNSDL } from "@/lib/parser";
+import { parseCDSL, parseNSDL } from "@/lib/parser";
 import { CdslHolding } from "@/types/api/cdsl-holding";
-import { ClientInfo } from "@/types/api/get-client";
 import { NsdlHolding } from "@/types/api/nsdl-holding";
-import { log } from "console";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
@@ -60,7 +56,13 @@ export async function POST(req: Request) {
       dpClientId
     } = await req.json();
 
-    
+    // Validate required fields
+    if (!depository || !dpClientId) {
+      return NextResponse.json(
+        { status: false, message: "Missing required fields", statusCode: 400 },
+        { status: 400 }
+      );
+    }
 
     const baseUrl = env.FED_API_URL;
 
@@ -132,7 +134,7 @@ export async function POST(req: Request) {
       const parsedResponse = parseNSDL(response.Response, dpClientId);
       response.parsed = parsedResponse;
     }
- 
+
     return NextResponse.json(
       response
     );

@@ -1,6 +1,6 @@
 import { ClientIds } from "@/types/api/get-client";
 import { Holding, Cdsl } from "@/types/cdsl";
-import { Nsdl, TotalValueInfo, ClientInfo, Holding2 } from "@/types/nsdl";
+import { Nsdl } from "@/types/nsdl";
 
 export function parseCDSL(input: string, dpClientId: string): Cdsl {
   const lines = input.split("\r\n").filter(Boolean);

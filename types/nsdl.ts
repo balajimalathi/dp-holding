@@ -71,6 +71,370 @@ export const mockNsdl: Nsdl = {
       beneficiary: "Beneficiary",
       quantity: 1000,
       value: 21600
+    },
+    {
+      isin: "INE02RE01045",
+      name: "BRAINBEES SOLUTIONS LIMITED - EQ NEW FV Rs.2/-",
+      beneficiary: "Beneficiary",
+      quantity: 32,
+      value: 18796.8
+    },
+    {
+      isin: "INE0CU601026",
+      name: "GMR POWER AND URBAN INFRA LIMITED - EQ NEW FV Rs.5/-",
+      beneficiary: "Beneficiary",
+      quantity: 92,
+      value: 10444.76
+    },
+    {
+      isin: "IN0020200377",
+      name: "GOVERNMENT OF INDIA - SGB 05JN29 S IX 2.50 FV RS 5000",
+      beneficiary: "Beneficiary",
+      quantity: 5,
+      value: 40644.4
+    },
+    {
+      isin: "INE528G01035",
+      name: "YES BANK LIMITED - EQ NEW FV RS. 2/-",
+      beneficiary: "Beneficiary",
+      quantity: 1000,
+      value: 21600
+    },
+    {
+      isin: "INE02RE01045",
+      name: "BRAINBEES SOLUTIONS LIMITED - EQ NEW FV Rs.2/-",
+      beneficiary: "Beneficiary",
+      quantity: 32,
+      value: 18796.8
+    },
+    {
+      isin: "INE0CU601026",
+      name: "GMR POWER AND URBAN INFRA LIMITED - EQ NEW FV Rs.5/-",
+      beneficiary: "Beneficiary",
+      quantity: 92,
+      value: 10444.76
+    },
+    {
+      isin: "IN0020200377",
+      name: "GOVERNMENT OF INDIA - SGB 05JN29 S IX 2.50 FV RS 5000",
+      beneficiary: "Beneficiary",
+      quantity: 5,
+      value: 40644.4
+    },
+    {
+      isin: "INE528G01035",
+      name: "YES BANK LIMITED - EQ NEW FV RS. 2/-",
+      beneficiary: "Beneficiary",
+      quantity: 1000,
+      value: 21600
+    },
+    {
+      isin: "INE02RE01045",
+      name: "BRAINBEES SOLUTIONS LIMITED - EQ NEW FV Rs.2/-",
+      beneficiary: "Beneficiary",
+      quantity: 32,
+      value: 18796.8
+    },
+    {
+      isin: "INE0CU601026",
+      name: "GMR POWER AND URBAN INFRA LIMITED - EQ NEW FV Rs.5/-",
+      beneficiary: "Beneficiary",
+      quantity: 92,
+      value: 10444.76
+    },
+    {
+      isin: "IN0020200377",
+      name: "GOVERNMENT OF INDIA - SGB 05JN29 S IX 2.50 FV RS 5000",
+      beneficiary: "Beneficiary",
+      quantity: 5,
+      value: 40644.4
+    },
+    {
+      isin: "INE528G01035",
+      name: "YES BANK LIMITED - EQ NEW FV RS. 2/-",
+      beneficiary: "Beneficiary",
+      quantity: 1000,
+      value: 21600
+    },
+    {
+      isin: "INE02RE01045",
+      name: "BRAINBEES SOLUTIONS LIMITED - EQ NEW FV Rs.2/-",
+      beneficiary: "Beneficiary",
+      quantity: 32,
+      value: 18796.8
+    },
+    {
+      isin: "INE0CU601026",
+      name: "GMR POWER AND URBAN INFRA LIMITED - EQ NEW FV Rs.5/-",
+      beneficiary: "Beneficiary",
+      quantity: 92,
+      value: 10444.76
+    },
+    {
+      isin: "IN0020200377",
+      name: "GOVERNMENT OF INDIA - SGB 05JN29 S IX 2.50 FV RS 5000",
+      beneficiary: "Beneficiary",
+      quantity: 5,
+      value: 40644.4
+    },
+    {
+      isin: "INE528G01035",
+      name: "YES BANK LIMITED - EQ NEW FV RS. 2/-",
+      beneficiary: "Beneficiary",
+      quantity: 1000,
+      value: 21600
+    },
+    {
+      isin: "INE02RE01045",
+      name: "BRAINBEES SOLUTIONS LIMITED - EQ NEW FV Rs.2/-",
+      beneficiary: "Beneficiary",
+      quantity: 32,
+      value: 18796.8
+    },
+    {
+      isin: "INE0CU601026",
+      name: "GMR POWER AND URBAN INFRA LIMITED - EQ NEW FV Rs.5/-",
+      beneficiary: "Beneficiary",
+      quantity: 92,
+      value: 10444.76
+    },
+    {
+      isin: "IN0020200377",
+      name: "GOVERNMENT OF INDIA - SGB 05JN29 S IX 2.50 FV RS 5000",
+      beneficiary: "Beneficiary",
+      quantity: 5,
+      value: 40644.4
+    },
+    {
+      isin: "INE528G01035",
+      name: "YES BANK LIMITED - EQ NEW FV RS. 2/-",
+      beneficiary: "Beneficiary",
+      quantity: 1000,
+      value: 21600
+    },
+    {
+      isin: "INE02RE01045",
+      name: "BRAINBEES SOLUTIONS LIMITED - EQ NEW FV Rs.2/-",
+      beneficiary: "Beneficiary",
+      quantity: 32,
+      value: 18796.8
+    },
+    {
+      isin: "INE0CU601026",
+      name: "GMR POWER AND URBAN INFRA LIMITED - EQ NEW FV Rs.5/-",
+      beneficiary: "Beneficiary",
+      quantity: 92,
+      value: 10444.76
+    },
+    {
+      isin: "IN0020200377",
+      name: "GOVERNMENT OF INDIA - SGB 05JN29 S IX 2.50 FV RS 5000",
+      beneficiary: "Beneficiary",
+      quantity: 5,
+      value: 40644.4
+    },
+    {
+      isin: "INE528G01035",
+      name: "YES BANK LIMITED - EQ NEW FV RS. 2/-",
+      beneficiary: "Beneficiary",
+      quantity: 1000,
+      value: 21600
+    },
+    {
+      isin: "INE02RE01045",
+      name: "BRAINBEES SOLUTIONS LIMITED - EQ NEW FV Rs.2/-",
+      beneficiary: "Beneficiary",
+      quantity: 32,
+      value: 18796.8
+    },
+    {
+      isin: "INE0CU601026",
+      name: "GMR POWER AND URBAN INFRA LIMITED - EQ NEW FV Rs.5/-",
+      beneficiary: "Beneficiary",
+      quantity: 92,
+      value: 10444.76
+    },
+    {
+      isin: "IN0020200377",
+      name: "GOVERNMENT OF INDIA - SGB 05JN29 S IX 2.50 FV RS 5000",
+      beneficiary: "Beneficiary",
+      quantity: 5,
+      value: 40644.4
+    },
+    {
+      isin: "INE528G01035",
+      name: "YES BANK LIMITED - EQ NEW FV RS. 2/-",
+      beneficiary: "Beneficiary",
+      quantity: 1000,
+      value: 21600
+    },
+    {
+      isin: "INE02RE01045",
+      name: "BRAINBEES SOLUTIONS LIMITED - EQ NEW FV Rs.2/-",
+      beneficiary: "Beneficiary",
+      quantity: 32,
+      value: 18796.8
+    },
+    {
+      isin: "INE0CU601026",
+      name: "GMR POWER AND URBAN INFRA LIMITED - EQ NEW FV Rs.5/-",
+      beneficiary: "Beneficiary",
+      quantity: 92,
+      value: 10444.76
+    },
+    {
+      isin: "IN0020200377",
+      name: "GOVERNMENT OF INDIA - SGB 05JN29 S IX 2.50 FV RS 5000",
+      beneficiary: "Beneficiary",
+      quantity: 5,
+      value: 40644.4
+    },
+    {
+      isin: "INE528G01035",
+      name: "YES BANK LIMITED - EQ NEW FV RS. 2/-",
+      beneficiary: "Beneficiary",
+      quantity: 1000,
+      value: 21600
+    },
+    {
+      isin: "INE02RE01045",
+      name: "BRAINBEES SOLUTIONS LIMITED - EQ NEW FV Rs.2/-",
+      beneficiary: "Beneficiary",
+      quantity: 32,
+      value: 18796.8
+    },
+    {
+      isin: "INE0CU601026",
+      name: "GMR POWER AND URBAN INFRA LIMITED - EQ NEW FV Rs.5/-",
+      beneficiary: "Beneficiary",
+      quantity: 92,
+      value: 10444.76
+    },
+    {
+      isin: "IN0020200377",
+      name: "GOVERNMENT OF INDIA - SGB 05JN29 S IX 2.50 FV RS 5000",
+      beneficiary: "Beneficiary",
+      quantity: 5,
+      value: 40644.4
+    },
+    {
+      isin: "INE528G01035",
+      name: "YES BANK LIMITED - EQ NEW FV RS. 2/-",
+      beneficiary: "Beneficiary",
+      quantity: 1000,
+      value: 21600
+    },
+    {
+      isin: "INE02RE01045",
+      name: "BRAINBEES SOLUTIONS LIMITED - EQ NEW FV Rs.2/-",
+      beneficiary: "Beneficiary",
+      quantity: 32,
+      value: 18796.8
+    },
+    {
+      isin: "INE0CU601026",
+      name: "GMR POWER AND URBAN INFRA LIMITED - EQ NEW FV Rs.5/-",
+      beneficiary: "Beneficiary",
+      quantity: 92,
+      value: 10444.76
+    },
+    {
+      isin: "IN0020200377",
+      name: "GOVERNMENT OF INDIA - SGB 05JN29 S IX 2.50 FV RS 5000",
+      beneficiary: "Beneficiary",
+      quantity: 5,
+      value: 40644.4
+    },
+    {
+      isin: "INE528G01035",
+      name: "YES BANK LIMITED - EQ NEW FV RS. 2/-",
+      beneficiary: "Beneficiary",
+      quantity: 1000,
+      value: 21600
+    },
+    {
+      isin: "INE02RE01045",
+      name: "BRAINBEES SOLUTIONS LIMITED - EQ NEW FV Rs.2/-",
+      beneficiary: "Beneficiary",
+      quantity: 32,
+      value: 18796.8
+    },
+    {
+      isin: "INE0CU601026",
+      name: "GMR POWER AND URBAN INFRA LIMITED - EQ NEW FV Rs.5/-",
+      beneficiary: "Beneficiary",
+      quantity: 92,
+      value: 10444.76
+    },
+    {
+      isin: "IN0020200377",
+      name: "GOVERNMENT OF INDIA - SGB 05JN29 S IX 2.50 FV RS 5000",
+      beneficiary: "Beneficiary",
+      quantity: 5,
+      value: 40644.4
+    },
+    {
+      isin: "INE528G01035",
+      name: "YES BANK LIMITED - EQ NEW FV RS. 2/-",
+      beneficiary: "Beneficiary",
+      quantity: 1000,
+      value: 21600
+    },
+    {
+      isin: "INE02RE01045",
+      name: "BRAINBEES SOLUTIONS LIMITED - EQ NEW FV Rs.2/-",
+      beneficiary: "Beneficiary",
+      quantity: 32,
+      value: 18796.8
+    },
+    {
+      isin: "INE0CU601026",
+      name: "GMR POWER AND URBAN INFRA LIMITED - EQ NEW FV Rs.5/-",
+      beneficiary: "Beneficiary",
+      quantity: 92,
+      value: 10444.76
+    },
+    {
+      isin: "IN0020200377",
+      name: "GOVERNMENT OF INDIA - SGB 05JN29 S IX 2.50 FV RS 5000",
+      beneficiary: "Beneficiary",
+      quantity: 5,
+      value: 40644.4
+    },
+    {
+      isin: "INE528G01035",
+      name: "YES BANK LIMITED - EQ NEW FV RS. 2/-",
+      beneficiary: "Beneficiary",
+      quantity: 1000,
+      value: 21600
+    },
+    {
+      isin: "INE02RE01045",
+      name: "BRAINBEES SOLUTIONS LIMITED - EQ NEW FV Rs.2/-",
+      beneficiary: "Beneficiary",
+      quantity: 32,
+      value: 18796.8
+    },
+    {
+      isin: "INE0CU601026",
+      name: "GMR POWER AND URBAN INFRA LIMITED - EQ NEW FV Rs.5/-",
+      beneficiary: "Beneficiary",
+      quantity: 92,
+      value: 10444.76
+    },
+    {
+      isin: "IN0020200377",
+      name: "GOVERNMENT OF INDIA - SGB 05JN29 S IX 2.50 FV RS 5000",
+      beneficiary: "Beneficiary",
+      quantity: 5,
+      value: 40644.4
+    },
+    {
+      isin: "INE528G01035",
+      name: "YES BANK LIMITED - EQ NEW FV RS. 2/-",
+      beneficiary: "Beneficiary",
+      quantity: 1000,
+      value: 21600
     }
   ],
   totalValueInfo: {
