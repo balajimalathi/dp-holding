@@ -2,7 +2,7 @@ import { ClientIds } from "@/types/api/get-client";
 import { Holding, Cdsl } from "@/types/cdsl";
 import { Nsdl, TotalValueInfo, ClientInfo, Holding2 } from "@/types/nsdl";
 
-export function parseCDSL(input: string): Cdsl {
+export function parseCDSL(input: string, dpClientId: string): Cdsl {
   const lines = input.split("\r\n").filter(Boolean);
 
   const status = lines[0].split("~")[0];
@@ -33,6 +33,7 @@ export function parseCDSL(input: string): Cdsl {
   }
 
   return {
+    dpClientId,
     status,
     holdings,
     asOnDate,
@@ -40,7 +41,7 @@ export function parseCDSL(input: string): Cdsl {
   };
 }
 
-export function parseNSDL(raw: string): Nsdl {
+export function parseNSDL(raw: string, dpClientId: string): Nsdl {
     // Normalize line endings
   let data = raw.replace(/\r\n/g, "\n");
 
@@ -119,6 +120,7 @@ export function parseNSDL(raw: string): Nsdl {
   }
 
   return {
+    dpClientId,
     status,
     holdings,
     totalValueInfo,

@@ -26,78 +26,74 @@ export interface ClientInfo {
 
 export interface Nsdl {
   status: string;
+  dpClientId: string;
   holdings: Holding2[];
   totalValueInfo?: TotalValueInfo;
   lastCodDate?: string;
   clientInfo?: ClientInfo;
 };
 
-// export const nsdlData: Nsdl = {
-//   holdings: [
-//     {
-//       isin: "INE263A01024",
-//       name: "BHARAT ELECTRONIC- EQ",
-//       quantity: 6,
-//       holderType: "Beneficiary",
-//       value: 1887,
-//     },
-//     {
-//       isin: "INE171A01029",
-//       name: "FEDERAL BANK EQ 2/-",
-//       holderType: "Beneficiary",
-//       quantity: 1996,
-//       value: 426645,
-//     },
-//     {
-//       isin: "IN0020220045",
-//       name: "GOI SGB 31724 2030",
-//       quantity: 1,
-//       holderType: "Beneficiary",
-//       value: 8178,
-//     },
-//     {
-//       isin: "INE251H01024",
-//       name: "GVK POWER - EQ RE 1",
-//       quantity: 94,
-//       holderType: "Beneficiary",
-//       value: 474,
-//     },
-//     {
-//       isin: "INE335Y01020",
-//       name: "IRCTCL-EQ2/-",
-//       quantity: 35,
-//       holderType: "Beneficiary",
-//       value: 29162,
-//     },
-//     {
-//       isin: "INE146L01010",
-//       name: "KIRLOSKAR OIL ENG- EQ",
-//       quantity: 70,
-//       holderType: "Beneficiary",
-//       value: 82408,
-//     },
-//     {
-//       isin: "INE683A01023",
-//       name: "SOUTH INDIAN-EQ 1/-",
-//       quantity: 182,
-//       holderType: "Beneficiary",
-//       value: 4778,
-//     },
-//     {
-//       isin: "INE398A01010",
-//       name: "VENKY'(INDIA) EQTY",
-//       quantity: 10,
-//       holderType: "Beneficiary",
-//       value: 18145,
-//     },
-//     {
-//       isin: "INE528G01035",
-//       name: "YES BANK LTD-EQ2/-",
-//       quantity: 10,
-//       holderType: "Beneficiary",
-//       value: 218,
-//     },
-//   ],
-//   totalValue: 571893.98,
-//   asOnDate: "09-DEC-2024",
-// }
+export const mockNsdl: Nsdl = {
+  status: "Y",
+  dpClientId: "10336632",
+  holdings: [
+    {
+      isin: "INE208A01029",
+      name: "ASHOK LEYLAND LIMITED - EQ NEW FV RE.1/-",
+      beneficiary: "Beneficiary",
+      quantity: 35,
+      value: 8013.6
+    },
+    {
+      isin: "INE02RE01045",
+      name: "BRAINBEES SOLUTIONS LIMITED - EQ NEW FV Rs.2/-",
+      beneficiary: "Beneficiary",
+      quantity: 32,
+      value: 18796.8
+    },
+    {
+      isin: "INE0CU601026",
+      name: "GMR POWER AND URBAN INFRA LIMITED - EQ NEW FV Rs.5/-",
+      beneficiary: "Beneficiary",
+      quantity: 92,
+      value: 10444.76
+    },
+    {
+      isin: "IN0020200377",
+      name: "GOVERNMENT OF INDIA - SGB 05JN29 S IX 2.50 FV RS 5000",
+      beneficiary: "Beneficiary",
+      quantity: 5,
+      value: 40644.4
+    },
+    {
+      isin: "INE528G01035",
+      name: "YES BANK LIMITED - EQ NEW FV RS. 2/-",
+      beneficiary: "Beneficiary",
+      quantity: 1000,
+      value: 21600
+    }
+  ],
+  totalValueInfo: {
+    date: "10-12-2024",
+    totalValue: 1010749.26
+  },
+  lastCodDate: "16/03/2011 00:00:00",
+  clientInfo: {
+    dpmClientId: "10336632",
+    name: "BELSON P KURIAN",
+    address: [
+      "PAZHAYAMPILLIL HOUSE",
+      "SANTHIPURAM",
+      "PERUVA P O",
+      "KOTTAYAM, KERALA",
+      "686610"
+    ],
+    clientStatus: "Active",
+    bsdaFlag: "NO",
+    rgessFlag: "NO",
+    secondHolderName: "",
+    thirdHolderName: "",
+    clientType: "Resident",
+    clientSubtype: "Ordinary"
+  }
+};

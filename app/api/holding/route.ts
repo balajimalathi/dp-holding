@@ -60,6 +60,7 @@ export async function POST(req: Request) {
       dpClientId
     } = await req.json();
 
+    
 
     const baseUrl = env.FED_API_URL;
 
@@ -108,7 +109,7 @@ export async function POST(req: Request) {
         Description: "Success"
       }
 
-      const parsedResponse = parseCDSL(response.Response);
+      const parsedResponse = parseCDSL(response.Response, dpClientId);
       response.parsed = parsedResponse;
     }
 
@@ -128,7 +129,7 @@ export async function POST(req: Request) {
         Description: "Success"
       }
 
-      const parsedResponse = parseNSDL(response.Response);
+      const parsedResponse = parseNSDL(response.Response, dpClientId);
       response.parsed = parsedResponse;
     }
  

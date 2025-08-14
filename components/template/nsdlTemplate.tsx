@@ -19,7 +19,7 @@ export default function NsdlTemplate({
       {/* Bank Info */}
       <div className="text-center mb-6">
         <p className="font-bold">THE FEDERAL BANK LIMITED</p>
-        <p>NSDL DP ID: {data.account?.dpId}</p>
+        <p>CDSL DP ID: {data.dpClientId}</p>
         <p>Depository Services Division</p>
         <p>
           Operations Department, III Floor <br />
@@ -32,10 +32,19 @@ export default function NsdlTemplate({
         <tbody>
           <tr>
             <td>
-              Date: {data.asOnDate}
+              Bo Id:   {data.clientInfo?.dpmClientId}
             </td>
             <td>
-              Total Value: ₹{data.totalValue.toLocaleString()}
+              Status:  {data.clientInfo?.clientStatus}
+            </td>
+            <td>
+              Type:    {data.clientInfo?.clientType}
+            </td>
+            <td>
+              Freeze:   {data.clientInfo?.rgessFlag}
+            </td>
+            <td>
+              Date:    {data.lastCodDate}
             </td>
           </tr>
         </tbody>
@@ -43,31 +52,37 @@ export default function NsdlTemplate({
 
 
       {/* Account Info Table */}
-      <div className="mb-4">
-        <p className="font-semibold">Holdings Summary</p>
-        <p className="text-sm">Total Value: ₹{data.totalValue.toLocaleString()}</p>
-        <p className="text-sm">As of Date: {data.asOnDate}</p>
+      <div className="flex flex-row gap-2">
+        {/* <div className="flex flex-col"> */}
+        <p className="font-semibold">Name</p>
+        {/* </div> */}
+        <div className="mb-4">
+          <p className="text-sm">{data.clientInfo?.name}</p>
+          {data.clientInfo?.address.map((line, i) => (
+            <p className="text-sm" key={i}>{line}</p>
+          ))}
+        </div>
       </div>
 
-      {/* <p className="mb-4">
-        <strong>Second Holder:</strong> —
+      <p className="mb-4">
+        <strong>Second Holder:</strong> {data.clientInfo?.secondHolderName ?? '-'}
       </p>
       <p className="mb-4">
-        <strong>Third Holder:</strong> —
-      </p> */}
+        <strong>Third Holder:</strong> {data.clientInfo?.thirdHolderName ?? '-'}
+      </p>
 
       {/* Statement Period */}
       <div className="text-center font-semibold mb-2">
-        Holding Statement For The Period {data.asOnDate}
+        Holding Statement For The Period {data.lastCodDate}
       </div>
 
       {/* Holdings Table */}
       <table className="w-full border border-black border-collapse text-[12px]">
         <thead className="bg-gray-100">
           <tr>
-            <th className="border border-black px-2 py-1 text-left">ISIN Code</th>
             <th className="border border-black px-2 py-1 text-left">ISIN Name</th>
-            <th className="border border-black px-2 py-1 text-left">Account Description</th>
+            <th className="border border-black px-2 py-1 text-left">ISIN Code</th>
+            <th className="border border-black px-2 py-1 text-left">Account Type</th>
             <th className="border border-black px-2 py-1 text-right">Quantity</th>
             <th className="border border-black px-2 py-1 text-right">{`Value (Rs.)`}</th>
           </tr>
@@ -82,7 +97,7 @@ export default function NsdlTemplate({
                 {holding.name}
               </td>
               <td className="border border-black px-2 py-1">
-                {holding.holderType || '—'}
+                {holding.beneficiary || '—'}
               </td>
               <td className="border border-black px-2 py-1 text-right">
                 {holding.quantity || '—'}

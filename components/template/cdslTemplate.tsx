@@ -7,7 +7,8 @@ export default function CdslTemplate({
   data: Cdsl;
 }) {
   return (
-    <div className="p-8 bg-gray-50 min-h-screen text-sm">
+
+        <div className="p-8 bg-gray-50 min-h-screen text-sm">
       <div className="text-center mb-4">
         <img
           src="/logo.png"
@@ -19,7 +20,7 @@ export default function CdslTemplate({
       {/* Bank Info */}
       <div className="text-center mb-6">
         <p className="font-bold">THE FEDERAL BANK LIMITED</p>
-        <p>CDSL DP ID: {data.account.dpId}</p>
+        <p>NSDL DP ID: {data.dpClientId}</p>
         <p>Depository Services Division</p>
         <p>
           Operations Department, III Floor <br />
@@ -32,19 +33,10 @@ export default function CdslTemplate({
         <tbody>
           <tr>
             <td>
-              Bo Id:   {data.account.dpId}
+              Date: {data.asOnDate}
             </td>
             <td>
-              Status:  {data.account.status}
-            </td>
-            <td>
-              NRI:    {data.account.nri}
-            </td>
-            <td>
-              Freeze:   {data.account.freeze}
-            </td>
-            <td>
-              Date:    {data.summary.date}
+              Total Value: ₹{data.totalValue?.toLocaleString()}
             </td>
           </tr>
         </tbody>
@@ -52,16 +44,10 @@ export default function CdslTemplate({
 
 
       {/* Account Info Table */}
-      <div className="flex flex-row gap-2">
-        {/* <div className="flex flex-col"> */}
-        <p className="font-semibold">Name</p>
-        {/* </div> */}
-        <div className="mb-4">
-          <p className="text-sm">{data.account.name}</p>
-          {data.account.address.map((line, i) => (
-            <p className="text-sm" key={i}>{line}</p>
-          ))}
-        </div>
+      <div className="mb-4">
+        <p className="font-semibold">Holdings Summary</p>
+        <p className="text-sm">Total Value: ₹{data.totalValue?.toLocaleString()}</p>
+        <p className="text-sm">As of Date: {data.asOnDate}</p>
       </div>
 
       {/* <p className="mb-4">
@@ -73,15 +59,16 @@ export default function CdslTemplate({
 
       {/* Statement Period */}
       <div className="text-center font-semibold mb-2">
-        Holding Statement For The Period {data.summary.date}
+        Holding Statement For The Period {data.asOnDate}
       </div>
 
       {/* Holdings Table */}
       <table className="w-full border border-black border-collapse text-[12px]">
         <thead className="bg-gray-100">
           <tr>
-            <th className="border border-black px-2 py-1 text-left">ISIN Name</th>
             <th className="border border-black px-2 py-1 text-left">ISIN Code</th>
+            <th className="border border-black px-2 py-1 text-left">ISIN Name</th>
+            <th className="border border-black px-2 py-1 text-left">Account Description</th>
             <th className="border border-black px-2 py-1 text-right">Quantity</th>
             <th className="border border-black px-2 py-1 text-right">{`Value (Rs.)`}</th>
           </tr>
@@ -90,10 +77,13 @@ export default function CdslTemplate({
           {data.holdings.map((holding, i) => (
             <tr key={i}>
               <td className="border border-black px-2 py-1">
+                {holding.isin || '—'}
+              </td>
+              <td className="border border-black px-2 py-1">
                 {holding.name}
               </td>
               <td className="border border-black px-2 py-1">
-                {holding.isin || '—'}
+                {holding.type || '—'}
               </td>
               <td className="border border-black px-2 py-1 text-right">
                 {holding.quantity || '—'}
