@@ -47,25 +47,32 @@ import { parseCDSL, parseNSDL } from "@/lib/parser";
 import { CdslHolding } from "@/types/api/cdsl-holding";
 import { NsdlHolding } from "@/types/api/nsdl-holding";
 import { NextResponse } from "next/server";
+import { z } from "zod";
+
+const RequestSchema = z.object({
+  depository: z.enum(['CDSL', 'NSDL']),
+  dpClientId: z.string().min(1, "DP Client ID is required")
+});
 
 export async function POST(req: Request) {
   try {
-
-    const {
-      depository,
-      dpClientId
-    } = await req.json();
-
-    // Validate required fields
-    if (!depository || !dpClientId) {
+    const body = await req.json();
+    const validation = RequestSchema.safeParse(body);
+    
+    if (!validation.success) {
       return NextResponse.json(
-        { status: false, message: "Missing required fields", statusCode: 400 },
+        { 
+          status: false, 
+          message: "Validation failed",
+          errors: validation.error.issues
+        },
         { status: 400 }
       );
     }
 
-    const baseUrl = env.FED_API_URL;
+    const { depository, dpClientId } = validation.data;
 
+    const baseUrl = env.FED_API_URL;
     const now = new Date(Date.now());
     const isoString = now.toISOString().replace('Z', '').replace(/\..+/, '');
 
@@ -101,7 +108,7 @@ export async function POST(req: Request) {
         ReqRefNo: "07082025RE986RD5099",
         Depository: "CDSL",
         Option: "01",
-        Dpclient_Id: "11587875",
+        Dpclient_Id: dpClientId,
         Ason_Date: "2025-08-07",
         PrintValue: "Y",
         DPRefNo: "07082516132012CE7D89",
@@ -121,7 +128,7 @@ export async function POST(req: Request) {
         ReqRefNo: "07082025RE986R099099",
         Depository: "NSDL",
         Option: "01",
-        Dpclient_Id: "1974276287875",
+        Dpclient_Id: dpClientId,
         Ason_Date: "2025-08-07",
         PrintValue: "Y",
         DPRefNo: "0708251619297E74C4CA",
@@ -135,10 +142,16 @@ export async function POST(req: Request) {
       response.parsed = parsedResponse;
     }
 
-    return NextResponse.json(
-      response
-    );
+    return NextResponse.json(response);
   } catch (error: any) {
-    return NextResponse.json({ status: 500, error });
+    console.error("Holding API Error:", error);
+    return NextResponse.json(
+      { 
+        status: false, 
+        message: "Server error",
+        error: error.message 
+      },
+      { status: 500 }
+    );
   }
 }

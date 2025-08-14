@@ -1,6 +1,5 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 import { POST, PUT } from '@/app/api/redirect-url/route'
-import { encode, decode } from '@/lib/crypto'
 
 // Mock the crypto module
 vi.mock('@/lib/crypto', () => ({

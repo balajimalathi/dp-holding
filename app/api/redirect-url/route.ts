@@ -1,30 +1,34 @@
 import { env } from "@/env/server";
 import { decode, encode } from "@/lib/crypto";
 import { NextResponse } from "next/server";
+import z from "zod";
+
+const RequestSchema = z.object({
+  purchaseId: z.string().min(1, "Purchase ID is required"),
+  emailId: z.string().email("Email ID is required").min(1),
+  mobileNo: z.string().min(1, "Mobile Number is required"),
+  ucic: z.string().min(1, "Customer ID is required")
+});
 
 export async function POST(req: Request) {
   try {
     const baseUrl = env.APP_URL;
-    
+
     const body = await req.json();
-    
-    // Validate required fields
-    if (!body.purchaseId || !body.emailId || !body.mobileNo || !body.ucic) {
+
+    const validation = RequestSchema.safeParse(body);
+
+    if (!validation.success) {
       return NextResponse.json(
-        { status: false, message: "Missing required fields", statusCode: 400 },
+        {
+          status: false,
+          message: "Validation failed",
+          errors: validation.error.issues
+        },
         { status: 400 }
       );
     }
-    
-    // Validate email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(body.emailId)) {
-      return NextResponse.json(
-        { status: false, message: "Invalid email format", statusCode: 400 },
-        { status: 400 }
-      );
-    }
-    
+
     const encrypted = encode({
       purchaseId: body.purchaseId,
       emailId: body.emailId,
@@ -49,14 +53,14 @@ export async function POST(req: Request) {
 export async function PUT(req: Request) {
   try {
     const { data } = await req.json();
-    
+
     if (!data) {
       return NextResponse.json(
         { status: false, message: "Missing data parameter", statusCode: 400 },
         { status: 400 }
       );
     }
-    
+
     try {
       const decoded = decode(data);
       return NextResponse.json(decoded);
