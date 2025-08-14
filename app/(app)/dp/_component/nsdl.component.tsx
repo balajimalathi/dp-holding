@@ -1,7 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Nsdl } from "@/types/nsdl";
-import { Calendar, User } from "lucide-react";
+import { Calendar, MapPin, User } from "lucide-react";
 
 // NSDL Holdings Component
 export const NSDLHoldings = ({ data }: { data: Nsdl }) => (
@@ -25,7 +25,7 @@ export const NSDLHoldings = ({ data }: { data: Nsdl }) => (
                 {data.clientInfo?.clientStatus}
               </span>
             </div>
-            <p className="text-sm text-green-600 mt-1">{data.clientInfo.bsdaFlag}</p>
+            <p className="text-sm text-green-600 mt-1">{data.clientInfo?.clientType}</p>
           </div>
         </div>
         <div className="flex items-start gap-3">
@@ -34,7 +34,7 @@ export const NSDLHoldings = ({ data }: { data: Nsdl }) => (
 
             <div className="flex items-start gap-1 mt-2">
               <div className="text-sm text-green-600">
-                {data.account.address.map((line: string, index: number) => (
+                {data.clientInfo?.address.map((line: string, index: number) => (
                   <div key={index}>{line}</div>
                 ))}
               </div>
@@ -51,12 +51,12 @@ export const NSDLHoldings = ({ data }: { data: Nsdl }) => (
         <div className="flex justify-between items-center">
           <div>
             <h3 className="text-lg font-semibold text-blue-800 ">Total Value</h3>
-            <p className="text-2xl font-bold text-blue-900 ">₹{data.summary.totalValue.toLocaleString()}</p>
+            <p className="text-2xl font-bold text-blue-900 ">₹{data.totalValueInfo?.totalValue.toLocaleString()}</p>
           </div>
           <div className="text-right">
             <p className="text-sm text-blue-900 flex items-center gap-1">
               <Calendar className="h-4 w-4" />
-              As on {data.summary.date}
+              As on {data.totalValueInfo?.date}
             </p>
           </div>
         </div>
@@ -80,7 +80,7 @@ export const NSDLHoldings = ({ data }: { data: Nsdl }) => (
             </div>
             <div className="flex justify-between text-sm text-gray-600">
               <div className="flex flex-col">
-                <p className="text-black text-md">{holding.holderType}</p>
+                <p className="text-black text-md">{holding.beneficiary}</p>
                 <Label className="text-xs">Type</Label>
               </div>
               <div className="flex flex-col">

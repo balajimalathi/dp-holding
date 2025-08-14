@@ -12,7 +12,7 @@ export const CDSLHoldings = ({ data }: { data: Cdsl }) => (
         <div className="flex justify-between items-center">
           <div>
             <h3 className="text-lg font-semibold text-blue-800">Total Value</h3>
-            <p className="text-2xl font-bold text-blue-900">₹{data.totalValue.toLocaleString()}</p>
+            <p className="text-2xl font-bold text-blue-900">₹{data.totalValue?.toLocaleString()}</p>
           </div>
           <div className="text-right">
             <p className="text-sm text-blue-900 flex items-center gap-1">
