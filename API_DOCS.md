@@ -1,6 +1,7 @@
 # API Documentation
 
 ## Table of Contents
+
 1. [Client ID API](#client-id-api)
 2. [Holding API](#holding-api)  
 3. [Redirect URL API](#redirect-url-api)
@@ -9,11 +10,13 @@
 ---
 
 ## Client ID API
+
 `POST /api/client-id`
 
 Gets client IDs from CDSL and NSDL depositories for a given customer.
 
 ### Request
+
 ```json
 {
   "data": "encrypted-string"  // Contains UCIC (Customer ID)
@@ -21,6 +24,7 @@ Gets client IDs from CDSL and NSDL depositories for a given customer.
 ```
 
 ### Example Request Payload
+
 ```json
 {
   "SenderCode": "FEDMB",
@@ -32,6 +36,7 @@ Gets client IDs from CDSL and NSDL depositories for a given customer.
 ```
 
 ### Successful Response
+
 ```json
 {
   "SenderCode": "FEDMB",
@@ -54,17 +59,20 @@ Gets client IDs from CDSL and NSDL depositories for a given customer.
 ```
 
 ### Error Responses
+
 - **400 Bad Request**: Invalid request format
 - **500 Internal Server Error**: Server error
 
 ---
 
 ## Holding API
+
 `POST /api/holding`
 
 Gets holding details for a client from either CDSL or NSDL.
 
 ### Request
+
 ```json
 {
   "depository": "CDSL" | "NSDL",
@@ -73,6 +81,7 @@ Gets holding details for a client from either CDSL or NSDL.
 ```
 
 ### Example CDSL Request
+
 ```json
 {
   "SenderCode": "FEDMB",
@@ -87,6 +96,7 @@ Gets holding details for a client from either CDSL or NSDL.
 ```
 
 ### Example NSDL Request
+
 ```json
 {
   "SenderCode": "FEDMB",
@@ -100,6 +110,7 @@ Gets holding details for a client from either CDSL or NSDL.
 ```
 
 ### Successful CDSL Response
+
 ```json
 {
   "SenderCode": "FEDMB",
@@ -118,17 +129,20 @@ Gets holding details for a client from either CDSL or NSDL.
 ```
 
 ### Error Responses
+
 - **400 Bad Request**: Invalid request format
 - **500 Internal Server Error**: Server error
 
 ---
 
 ## Redirect URL API
+
 `POST /api/redirect-url`
 
 Generates an encrypted redirect URL with customer details.
 
 ### Request
+
 ```json
 {
   "purchaseId": "string",
@@ -139,6 +153,7 @@ Generates an encrypted redirect URL with customer details.
 ```
 
 ### Successful Response
+
 ```json
 {
   "status": true,
@@ -149,9 +164,11 @@ Generates an encrypted redirect URL with customer details.
 ```
 
 ### PUT /api/redirect-url
+
 Decodes the encrypted data.
 
 ### Request
+
 ```json
 {
   "data": "encrypted-string"
@@ -159,6 +176,7 @@ Decodes the encrypted data.
 ```
 
 ### Successful Response
+
 ```json
 {
   "purchaseId": "string",
@@ -169,21 +187,25 @@ Decodes the encrypted data.
 ```
 
 ### Error Responses
+
 - **400 Bad Request**: Invalid request format
 - **500 Internal Server Error**: Server error
 
 ---
 
 ## Report API
+
 `POST /api/report?id=:id&holding=:type`
 
 Generates a PDF report for holdings.
 
 ### Query Parameters
+
 - `id`: Document ID
 - `holding`: "cdsl" or "nsdl"
 
 ### Request Body
+
 ```json
 {
   "data": "holding-data"
@@ -191,8 +213,10 @@ Generates a PDF report for holdings.
 ```
 
 ### Response
+
 Returns a PDF file with Content-Type: application/pdf
 
 ### Error Responses
+
 - **400 Bad Request**: Invalid holding type
 - **500 Internal Server Error**: Server error
