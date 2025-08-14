@@ -40,9 +40,9 @@ export default function NsdlTemplate({
             <td>
               Type:    {data.clientInfo?.clientType}
             </td>
-            <td>
+            {/* <td>
               Freeze:   {data.clientInfo?.rgessFlag}
-            </td>
+            </td> */}
             <td>
               Date:    {data.lastCodDate}
             </td>

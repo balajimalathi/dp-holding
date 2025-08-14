@@ -130,7 +130,12 @@ export function parseNSDL(raw: string, dpClientId: string): Nsdl {
 }
 
 
-export function parseClientId(input: string): ClientIds {
+export function parseClientId(input?: string): ClientIds | null {
+
+  if(!input) {
+    return null;
+  }
+  
   const parts = input.split("~");
 
   return {

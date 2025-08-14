@@ -14,6 +14,7 @@ import { Download, Building2 } from "lucide-react"
 import Image from "next/image"
 import { CDSLHoldings } from "./_component/cdsl.component"
 import { NSDLHoldings } from "./_component/nsdl.component"
+import { useSearchParams } from "next/navigation";
 
 // Zod validation schema
 const formSchema = z.object({
@@ -25,8 +26,12 @@ type FormData = z.infer<typeof formSchema>
 
 
 export default function Dp() {
+
+
   const [results, setResults] = useState<any>(null)
   const [showResults, setShowResults] = useState(false)
+
+  const searchParams = useSearchParams()
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -108,7 +113,7 @@ export default function Dp() {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ cusId: '118877875' }) // TODO: Replace with actual customer ID
+          body: JSON.stringify({ data: searchParams.get('data') }) // TODO: Replace with actual customer ID
         })
 
         const data = await response.json()
