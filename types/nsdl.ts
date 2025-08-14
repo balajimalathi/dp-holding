@@ -26,7 +26,7 @@ export interface ClientInfo {
 
 export interface Nsdl {
   status: string;
-  dpClientId: string;
+  dpClientId?: string;
   holdings: Holding2[];
   totalValueInfo?: TotalValueInfo;
   lastCodDate?: string;

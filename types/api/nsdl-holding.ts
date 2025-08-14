@@ -10,7 +10,7 @@ export interface NsdlHolding {
   PrintValue: string
   DPRefNo: string
   ResponseDateTime: string
-  Response: string
+  Response?: string
   parsed?: Nsdl
   Status: string
   Description: string

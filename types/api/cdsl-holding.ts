@@ -10,7 +10,7 @@ export interface CdslHolding {
   PrintValue: string
   DPRefNo: string
   ResponseDateTime: string
-  Response: string
+  Response?: string
   parsed?: Cdsl
   Status: string
   Description: string

@@ -7,7 +7,7 @@ export interface Holding {
 };
 
 export interface Cdsl {
-  dpClientId: string;
+  dpClientId?: string;
   status: string;
   holdings: Holding[];
   totalValue?: number;

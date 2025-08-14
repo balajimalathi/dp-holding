@@ -2,7 +2,12 @@ import { ClientIds } from "@/types/api/get-client";
 import { Holding, Cdsl } from "@/types/cdsl";
 import { Nsdl } from "@/types/nsdl";
 
-export function parseCDSL(input: string, dpClientId: string): Cdsl {
+export function parseCDSL(input?: string, dpClientId?: string): Cdsl | null {
+
+  if (!input) {
+    return null;
+  }
+
   const lines = input.split("\r\n").filter(Boolean);
 
   const status = lines[0].split("~")[0];
@@ -41,8 +46,13 @@ export function parseCDSL(input: string, dpClientId: string): Cdsl {
   };
 }
 
-export function parseNSDL(raw: string, dpClientId: string): Nsdl {
-    // Normalize line endings
+export function parseNSDL(raw?: string, dpClientId?: string): Nsdl | null {
+
+  if (!raw) {
+    return null;
+  }
+
+  // Normalize line endings
   let data = raw.replace(/\r\n/g, "\n");
 
   // Merge broken lines: if a line does not start with record type, join it to previous line
@@ -132,10 +142,10 @@ export function parseNSDL(raw: string, dpClientId: string): Nsdl {
 
 export function parseClientId(input?: string): ClientIds | null {
 
-  if(!input) {
+  if (!input) {
     return null;
   }
-  
+
   const parts = input.split("~");
 
   return {

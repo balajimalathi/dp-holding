@@ -32,7 +32,8 @@ export default function Dp() {
   const [results, setResults] = useState<any>(null)
   const [showResults, setShowResults] = useState(false)
   const [isDownloading, setDowloading] = useState(false)
-  const [description, setDescription] = useState(null)
+  const [description1, setDescription1] = useState<string | null>(null)
+  const [description2, setDescription2] = useState(null)
   const [isPageLoading, setPageLoading] = useState(true)
 
   // Account options from API response
@@ -75,6 +76,12 @@ export default function Dp() {
 
       const data = await response.json()
 
+
+      if (data.Status == "X") {
+        setDescription2(data.Description);
+        return;
+      }
+
       return {
         type: holdings,
         data: data.parsed
@@ -92,6 +99,7 @@ export default function Dp() {
     form.setValue("accountNumber", "")
     setShowResults(false)
     setResults(null)
+    setDescription2(null)
   }
 
   const onSubmit = async (data: FormData) => {
@@ -99,6 +107,7 @@ export default function Dp() {
       const response = await fetchHoldingsData(data.holdings, data.accountNumber)
       setResults(response)
       setShowResults(true)
+      setDescription2(null)
     } catch (error) {
       console.error("Error fetching data:", error)
     }
@@ -107,6 +116,11 @@ export default function Dp() {
   // Fetch client IDs on component mount
   useEffect(() => {
     const fetchClientIds = async () => {
+
+      if (!searchParams.get('data')) {
+        setDescription1("Invalid Data");
+      }
+
       try {
         const response = await fetch('/api/client-id', {
           method: 'POST',
@@ -121,7 +135,7 @@ export default function Dp() {
         // error
 
         if (data.Status == "X") {
-          setDescription(data.Description);
+          setDescription1(data.Description);
           setPageLoading(false);
           return;
         }
@@ -221,11 +235,11 @@ export default function Dp() {
             <Loading description={"Loading"} /> :
 
             <>
-              {description &&
-                <Warning description={description} />
+              {description1 &&
+                <Warning description={description1} />
               }
 
-              {!description &&
+              {!description1 &&
                 <CardContent className="px-4">
                   <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -305,7 +319,7 @@ export default function Dp() {
 
 
         {/* Second Section */}
-        {showResults && results && (
+        {showResults && results && !description2 && (
           <Card>
             <CardHeader className="px-4">
               <div className="flex flex-row sm:flex-row justify-between items-start sm:items-center gap-4">
@@ -324,6 +338,11 @@ export default function Dp() {
             </CardContent>
           </Card>
         )}
+
+        {description2 &&
+          <Warning description={description2} />
+        }
+
       </main>
 
       {/* Footer */}
