@@ -67,16 +67,16 @@ export async function POST(req: Request) {
       ResponseDateTime: "2025-08-07T00:00:00+05:30",
       Status: "S",
       Description: "Success",
-      CDSL_Response: null,
-      NSDL_Response: null
-      // CDSL_Response: {
-      //   Depository: "CDSL",
-      //   Response: "Y~000034~1308730000011320~1308730000011316"
-      // },
-      // NSDL_Response: {
-      //   Depository: "NSDL",
-      //   Response: "Y~000045~10674846~10674854~10678275~10678283~10731612"
-      // }
+      // CDSL_Response: null,
+      // NSDL_Response: null
+      CDSL_Response: {
+        Depository: "CDSL",
+        Response: "Y~000034~1308730000011320~1308730000011316"
+      },
+      NSDL_Response: {
+        Depository: "NSDL",
+        Response: "Y~000045~10674846~10674854~10678275~10678283~10731612"
+      }
     }
 
     if (response.CDSL_Response) {

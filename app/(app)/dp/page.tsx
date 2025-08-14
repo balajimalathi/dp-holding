@@ -10,11 +10,13 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Separator } from "@/components/ui/separator"
-import { Download, Building2 } from "lucide-react"
+import { Download, Building2, Loader } from "lucide-react"
 import Image from "next/image"
 import { CDSLHoldings } from "./_component/cdsl.component"
 import { NSDLHoldings } from "./_component/nsdl.component"
 import { useSearchParams } from "next/navigation";
+import { Warning } from "@/components/ui/warning"
+import { Loading } from "@/components/ui/loading"
 
 // Zod validation schema
 const formSchema = z.object({
@@ -27,9 +29,22 @@ type FormData = z.infer<typeof formSchema>
 
 export default function Dp() {
 
-
   const [results, setResults] = useState<any>(null)
   const [showResults, setShowResults] = useState(false)
+  const [isDownloading, setDowloading] = useState(false)
+  const [description, setDescription] = useState(null)
+  const [isPageLoading, setPageLoading] = useState(true)
+
+  // Account options from API response
+  const [accountOptions, setAccountOptions] = useState<{
+    cdsl: { value: string; label: string }[]
+    nsdl: { value: string; label: string }[]
+  }>({ cdsl: [], nsdl: [] })
+
+  // Holdings options
+  const [holdingOptions, setHoldingOptions] = useState<{
+    value: string; label: string
+  }[]>([])
 
   const searchParams = useSearchParams()
 
@@ -43,112 +58,6 @@ export default function Dp() {
 
   // Watch holdings to reset account number when holdings type changes
   const selectedHoldings = form.watch("holdings")
-
-  // Reset account number when holdings type changes
-  const handleHoldingsChange = (value: string) => {
-    form.setValue("holdings", value)
-    form.setValue("accountNumber", "")
-    setShowResults(false)
-    setResults(null)
-  }
-
-  const onSubmit = async (data: FormData) => {
-    try {
-      const response = await fetchHoldingsData(data.holdings, data.accountNumber)
-      setResults(response)
-      setShowResults(true)
-    } catch (error) {
-      console.error("Error fetching data:", error)
-    }
-  }
-
-  const handleDownload = async () => {
-    if (!results) return
-
-    try {
-
-      const response = await fetch(`/api/report?holding=${selectedHoldings}&id=${results.type}-${Date.now()}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(results) // TODO: Replace with actual customer ID
-      })
-
-      if (!response.ok) throw new Error('Failed to generate report')
-
-      const blob = await response.blob()
-      const url = window.URL.createObjectURL(blob)
-      const a = document.createElement('a')
-      a.href = url
-      a.download = `holdings-report-${results.type}-${new Date().toISOString().slice(0, 10)}.pdf`
-      document.body.appendChild(a)
-      a.click()
-      document.body.removeChild(a)
-      window.URL.revokeObjectURL(url)
-    } catch (error) {
-      console.error('Download failed:', error)
-      alert('Failed to download report. Please try again.')
-    }
-  }
-
-  // Account options from API response
-  const [accountOptions, setAccountOptions] = useState<{
-    cdsl: { value: string; label: string }[]
-    nsdl: { value: string; label: string }[]
-  }>({ cdsl: [], nsdl: [] })
-
-  // Holdings options
-  const [holdingOptions, setHoldingOptions] = useState<{
-    value: string; label: string
-  }[]>([])
-
-
-  // Fetch client IDs on component mount
-  useEffect(() => {
-    const fetchClientIds = async () => {
-      try {
-        const response = await fetch('/api/client-id', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ data: searchParams.get('data') }) // TODO: Replace with actual customer ID
-        })
-
-        const data = await response.json()
-
-        var options: any[] = []
-
-        if (data.CDSL_Response) {
-          options.push({ value: 'cdsl', label: 'CDSL' })
-        }
-
-        if (data.NSDL_Response) {
-          options.push({ value: 'nsdl', label: 'NSDL' })
-        }
-
-        setHoldingOptions(options)
-
-        setAccountOptions({
-          cdsl: data.parsedCdsl?.clientId.map((id: string) => ({
-            value: id,
-            label: id
-          })),
-          nsdl: data.parsedNsdl?.clientId.map((id: string) => ({
-            value: id,
-            label: id
-          }))
-        })
-      } catch (error) {
-        console.error('Error fetching client IDs:', error)
-      }
-    }
-
-    fetchClientIds()
-  }, [])
-
-
 
   // Fetch holdings data from API
   const fetchHoldingsData = async (holdings: string, accountNumber: string) => {
@@ -176,6 +85,114 @@ export default function Dp() {
     }
   }
 
+
+  // Reset account number when holdings type changes
+  const handleHoldingsChange = (value: string) => {
+    form.setValue("holdings", value)
+    form.setValue("accountNumber", "")
+    setShowResults(false)
+    setResults(null)
+  }
+
+  const onSubmit = async (data: FormData) => {
+    try {
+      const response = await fetchHoldingsData(data.holdings, data.accountNumber)
+      setResults(response)
+      setShowResults(true)
+    } catch (error) {
+      console.error("Error fetching data:", error)
+    }
+  }
+
+  // Fetch client IDs on component mount
+  useEffect(() => {
+    const fetchClientIds = async () => {
+      try {
+        const response = await fetch('/api/client-id', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ data: searchParams.get('data') }) // TODO: Replace with actual customer ID
+        })
+
+        const data = await response.json()
+
+        // error
+
+        if (data.Status == "X") {
+          setDescription(data.Description);
+          setPageLoading(false);
+          return;
+        }
+
+        var options: any[] = []
+
+        if (data.CDSL_Response) {
+          options.push({ value: 'cdsl', label: 'CDSL' })
+        }
+
+        if (data.NSDL_Response) {
+          options.push({ value: 'nsdl', label: 'NSDL' })
+        }
+
+        setHoldingOptions(options)
+
+        setAccountOptions({
+          cdsl: data.parsedCdsl?.clientId.map((id: string) => ({
+            value: id,
+            label: id
+          })),
+          nsdl: data.parsedNsdl?.clientId.map((id: string) => ({
+            value: id,
+            label: id
+          }))
+        })
+      } catch (error) {
+        setPageLoading(false);
+        console.error('Error fetching client IDs:', error)
+      }
+      setPageLoading(false);
+    }
+
+    fetchClientIds()
+  }, [])
+
+  const handleDownload = async () => {
+    if (!results) return
+
+    setDowloading(true);
+
+    try {
+
+      const response = await fetch(`/api/report?holding=${selectedHoldings}&id=${results.type}-${Date.now()}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(results) // TODO: Replace with actual customer ID
+      })
+
+      if (!response.ok) throw new Error('Failed to generate report')
+
+      const blob = await response.blob()
+      const url = window.URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `${results.type}-holdings-report-${new Date().toISOString().slice(0, 10)}.pdf`
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+      window.URL.revokeObjectURL(url)
+    } catch (error) {
+      console.error('Download failed:', error)
+      alert('Failed to download report. Please try again.')
+      setDowloading(false);
+    }
+
+    setDowloading(false);
+  }
+
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
       {/* Header */}
@@ -198,79 +215,94 @@ export default function Dp() {
             </CardTitle>
             <Separator className="mt-4" />
           </CardHeader>
-          <CardContent className="px-4">
-            <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
-                  {/* Holdings Type Dropdown */}
-                  <FormField
-                    control={form.control}
-                    name="holdings"
-                    render={({ field }) => (
-                      <FormItem className="flex flex-col">
-                        <FormLabel>Depository</FormLabel>
-                        <FormControl className="py-2">
-                          <RadioGroup
-                            onValueChange={handleHoldingsChange}
-                            defaultValue={field.value}
-                            className="flex flex-row space-x-2"
-                          >
-                            {holdingOptions.map((option) => (
-                              <FormItem key={option.value} className="flex items-center space-x-1 space-y-0">
+
+
+          {isPageLoading ?
+            <Loading description={"Loading"} /> :
+
+            <>
+              {description &&
+                <Warning description={description} />
+              }
+
+              {!description &&
+                <CardContent className="px-4">
+                  <Form {...form}>
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+                        {/* Holdings Type Dropdown */}
+                        <FormField
+                          control={form.control}
+                          name="holdings"
+                          render={({ field }) => (
+                            <FormItem className="flex flex-col">
+                              <FormLabel>Depository</FormLabel>
+                              <FormControl className="py-2">
+                                <RadioGroup
+                                  onValueChange={handleHoldingsChange}
+                                  defaultValue={field.value}
+                                  className="flex flex-row space-x-2"
+                                >
+                                  {holdingOptions.map((option) => (
+                                    <FormItem key={option.value} className="flex items-center space-x-1 space-y-0">
+                                      <FormControl>
+                                        <RadioGroupItem value={option.value} />
+                                      </FormControl>
+                                      <FormLabel className="font-normal">
+                                        {option.label}
+                                      </FormLabel>
+                                    </FormItem>
+                                  ))}
+                                </RadioGroup>
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+
+                        {/* Account Number Dropdown */}
+                        <FormField
+                          control={form.control}
+                          name="accountNumber"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Account Number</FormLabel>
+                              <Select value={field.value} onValueChange={field.onChange} disabled={!selectedHoldings}>
                                 <FormControl>
-                                  <RadioGroupItem value={option.value} />
+                                  <SelectTrigger className="w-full">
+                                    <SelectValue placeholder="Choose account number" />
+                                  </SelectTrigger>
                                 </FormControl>
-                                <FormLabel className="font-normal">
-                                  {option.label}
-                                </FormLabel>
-                              </FormItem>
-                            ))}
-                          </RadioGroup>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                                <SelectContent>
+                                  {selectedHoldings &&
+                                    accountOptions[selectedHoldings as keyof typeof accountOptions]?.map((option) => (
+                                      <SelectItem key={option.value} value={option.value}>
+                                        {option.label}
+                                      </SelectItem>
+                                    ))}
+                                </SelectContent>
+                              </Select>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
 
-                  {/* Account Number Dropdown */}
-                  <FormField
-                    control={form.control}
-                    name="accountNumber"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Account Number</FormLabel>
-                        <Select value={field.value} onValueChange={field.onChange} disabled={!selectedHoldings}>
-                          <FormControl>
-                            <SelectTrigger className="w-full">
-                              <SelectValue placeholder="Choose account number" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            {selectedHoldings &&
-                              accountOptions[selectedHoldings as keyof typeof accountOptions]?.map((option) => (
-                                <SelectItem key={option.value} value={option.value}>
-                                  {option.label}
-                                </SelectItem>
-                              ))}
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                        {/* CTA Button */}
+                        <div className="justify-center">
+                          <Button type="submit" disabled={form.formState.isSubmitting} className="w-full px-8 py-2">
+                            {form.formState.isSubmitting ? "Loading..." : "Get Holdings"}
+                          </Button>
+                        </div>
+                      </div>
 
-                  {/* CTA Button */}
-                  <div className="justify-center">
-                    <Button type="submit" disabled={form.formState.isSubmitting} className="w-full px-8 py-2">
-                      {form.formState.isSubmitting ? "Loading..." : "Get Holdings"}
-                    </Button>
-                  </div>
-                </div>
-
-              </form>
-            </Form>
-          </CardContent>
+                    </form>
+                  </Form>
+                </CardContent>
+              }
+            </>
+          }
         </Card>
+
 
         {/* Second Section */}
         {showResults && results && (
@@ -279,8 +311,9 @@ export default function Dp() {
               <div className="flex flex-row sm:flex-row justify-between items-start sm:items-center gap-4">
                 <CardTitle className="text-xl font-bold">{results.type.toUpperCase()} Holdings</CardTitle>
                 <div className="flex gap-2">
-                  <Button onClick={handleDownload} variant="outline" size="sm">
-                    <Download className="h-4 w-4 mr-2" />
+                  <Button onClick={handleDownload} disabled={isDownloading} variant="outline" size="sm">
+                    {isDownloading ?
+                      <Loader className="animate-spin h-4 w-4 mr-2" /> : <Download className="h-4 w-4 mr-2" />}
                     Download
                   </Button>
                 </div>
