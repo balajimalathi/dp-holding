@@ -77,8 +77,6 @@ export function parseNSDL(raw?: string, dpClientId?: string): Nsdl | null {
   for (const line of mergedLines.slice(1)) {
     const parts = line.split("~");
 
-    console.log(parts)
-
     switch (parts[0]) {
       case "01": {
         const isin = parts[1];

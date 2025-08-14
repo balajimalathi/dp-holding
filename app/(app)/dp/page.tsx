@@ -26,7 +26,6 @@ const formSchema = z.object({
 
 type FormData = z.infer<typeof formSchema>
 
-
 export default function Dp() {
 
   const [results, setResults] = useState<any>(null)

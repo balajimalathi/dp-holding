@@ -1,7 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Cdsl } from "@/types/cdsl";
-import { User, MapPin, Calendar } from "lucide-react";
+import { Calendar } from "lucide-react";
 
 // CDSL Holdings Component
 export const CDSLHoldings = ({ data }: { data: Cdsl }) => (

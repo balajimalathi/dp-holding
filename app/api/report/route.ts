@@ -1,7 +1,5 @@
 import { generatePdf } from "@/lib/generatePdf";
 import { renderNsdlPdf, renderCdslPdf } from "@/lib/report/cdsl.report";
-import { mockCdsl } from "@/types/cdsl";
-import { mockNsdl } from "@/types/nsdl";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
@@ -41,7 +39,6 @@ export async function POST(req: Request) {
       },
     });
   } catch (error: any) {
-    console.log(error)
     return NextResponse.json(
       { status: false, message: "Server error", statusCode: 500, error },
       { status: 500 }
