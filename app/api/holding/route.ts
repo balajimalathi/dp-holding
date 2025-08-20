@@ -82,7 +82,7 @@ export async function POST(req: Request) {
 
     const dateString = `${year}-${month}-${day}`;
 
-    var data = {
+    const data = {
       SenderCode: "FEDMB",
       ReqRefNo: "07082025RE986RD5099",
       ReqDateTime: isoString,

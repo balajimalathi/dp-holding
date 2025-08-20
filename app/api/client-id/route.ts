@@ -92,7 +92,7 @@ export async function POST(req: Request) {
     //   },
     // })
 
-    let response: ClientInfo = {
+    const response: ClientInfo = {
       SenderCode: "FEDMB",
       ReqRefNo: "07082025REF4664464",
       Option: "01",

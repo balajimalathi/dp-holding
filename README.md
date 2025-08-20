@@ -44,7 +44,11 @@ docker build -t fedmob-dp-holding .
 **Run the image in a container**
 
 ```bash
-docker run -p 3000:3000 fedmob-dp-holding
+docker run -p 3000:3000 \
+  -e NEXT_PUBLIC_APP_URL="https://localhost:3001" \
+  -e APP_URL="https://localhost:3001" \
+  -e FED_API_URL="https://localhost:3001" \
+  fedmob-dp-holding
 ```
 
 * `docker run` → starts a container from an image.

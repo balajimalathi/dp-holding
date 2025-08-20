@@ -27,7 +27,7 @@ export async function POST(req: Request) {
       htmlContent = await renderCdslPdf(body.data);
     }
 
-    const pdfBuffer = await generatePdf(htmlContent, documentId);
+    const pdfBuffer = await generatePdf(htmlContent);
 
     const buffer = Buffer.from(pdfBuffer);
 

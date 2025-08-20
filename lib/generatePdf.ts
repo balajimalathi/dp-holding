@@ -2,7 +2,7 @@ import puppeteer from "puppeteer";
 import path from "path";
 import fs from "fs";
   
-export const generatePdf = async (htmlContent: string, documentId: string) => {
+export const generatePdf = async (htmlContent: string) => {
   const browser = await puppeteer.launch({
     headless: true,
     args: ["--no-sandbox", "--disable-setuid-sandbox"]

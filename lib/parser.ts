@@ -1,5 +1,5 @@
 import { ClientIds } from "@/types/api/get-client";
-import { Holding, Cdsl } from "@/types/cdsl";
+import { Cdsl } from "@/types/cdsl";
 import { Nsdl } from "@/types/nsdl";
 
 export function parseCDSL(response?: string, dpClientId?: string): Cdsl | null {
@@ -72,7 +72,7 @@ export function parseNSDL(response?: string, dpClientId?: string): Nsdl | null {
   }
 
   // Normalize by removing carriage returns and collapsing spaces
-  let clean = response.replace(/\r/g, "").replace(/\s+/g, " ");
+  const clean = response.replace(/\r/g, "").replace(/\s+/g, " ");
 
   // Split into records by regex lookahead on type markers (01,02,03,04,05)
   const records = clean.split(/(?=(?:0[1-5])~)/).map(r => r.trim()).filter(Boolean);

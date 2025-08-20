@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Gabarito } from "next/font/google";
 import "./globals.css";
+import { Suspense } from "react";
+import { Loading } from "@/components/ui/loading";
 
 const roboto = Gabarito({
   subsets: ['latin'],
@@ -23,7 +25,9 @@ export default function RootLayout({
       <body
         className={`${roboto.className} antialiased`}
       >
-        {children}
+        <Suspense fallback={<Loading description={"Loading"} />}>
+          {children}
+        </Suspense>
       </body>
     </html>
   );

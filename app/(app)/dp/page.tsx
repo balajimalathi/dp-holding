@@ -139,7 +139,7 @@ export default function Dp() {
           return;
         }
 
-        var options: any[] = []
+        const options: any[] = []
 
         if (data.CDSL_Response) {
           options.push({ value: 'cdsl', label: 'CDSL' })
@@ -169,7 +169,7 @@ export default function Dp() {
     }
 
     fetchClientIds()
-  }, [])
+  }, [searchParams])
 
   const handleDownload = async () => {
     if (!results) return
