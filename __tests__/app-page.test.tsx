@@ -8,7 +8,7 @@ import Home from '@/app/(app)/page'
 describe('Home Page', () => {
   it('renders without crashing', () => {
     render(<Home />)
-    expect(screen.getByText('Hi')).toBeInTheDocument()
+    expect(screen.getByText('Federal Demat Holding')).toBeInTheDocument()
   })
 
   it('matches snapshot', () => {

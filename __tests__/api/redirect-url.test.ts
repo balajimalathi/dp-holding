@@ -13,7 +13,7 @@ vi.mock('@/lib/crypto', () => ({
   })
 }))
 
-describe('POST /api/hand-shake', () => {
+describe('POST /api/redirect-url', () => {
   it('should return success response with encoded URL for valid input', async () => {
     const mockRequest = {
       json: async () => ({
@@ -46,11 +46,13 @@ describe('POST /api/hand-shake', () => {
     } as any
 
     const response = await POST(mockRequest)
+    const data = await response.json()
+
     expect(response.status).toBe(400)
   })
 })
 
-describe('PUT /api/hand-shake', () => {
+describe('PUT /api/redirect-url', () => {
   it('should correctly decode valid encoded string', async () => {
     const testData = {
       purchaseId: 'cd99f25a-f598-477b-9ead-ea2e75d50300',
