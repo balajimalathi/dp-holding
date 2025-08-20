@@ -44,7 +44,7 @@ export default function NsdlTemplate({
               Freeze:   {data.clientInfo?.rgessFlag}
             </td> */}
             <td>
-              Date:    {data.lastCodDate}
+              Date:    {data.totalValueInfo?.date}
             </td>
           </tr>
         </tbody>

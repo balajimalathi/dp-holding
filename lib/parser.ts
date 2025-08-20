@@ -2,139 +2,157 @@ import { ClientIds } from "@/types/api/get-client";
 import { Holding, Cdsl } from "@/types/cdsl";
 import { Nsdl } from "@/types/nsdl";
 
-export function parseCDSL(input?: string, dpClientId?: string): Cdsl | null {
+export function parseCDSL(response?: string, dpClientId?: string): Cdsl | null {
 
-  if (!input) {
+  if (!response) {
     return null;
   }
 
-  const lines = input.split("\r\n").filter(Boolean);
+  // Normalize and split into records
+  const records = response
+    .replace(/\r/g, "")
+    .split(/<BR>/i)
+    .map(r => r.trim())
+    .filter(Boolean);
 
-  const status = lines[0].split("~")[0];
-  const holdings: Holding[] = [];
+  const result: Cdsl = {
+    status: response.startsWith("Y~") ? "Y" : "N",
+    dpClientId: dpClientId,
+    holdings: []
+  };
 
-  let totalValue: number | undefined;
-  let asOnDate: string | undefined;
+  for (const rec of records) {
+    // Remove leading "Y~" if present in first record
+    const normalized = rec.replace(/^Y~\s*/, "");
+    const tokens = normalized.split("~").map(t => t.trim());
 
-  for (const line of lines.slice(1)) {
-    const parts = line.split("~");
+    switch (tokens[0]) {
+      case "01": {
+        // Example: 01~ISIN~NAME~QTY~VALUE
+        const [, isin, name, qty, val] = tokens;
+        result.holdings.push({
+          type: "01",
+          isin,
+          name,
+          quantity: Number(qty.replace(/,/g, "")),
+          value: Number(val.replace(/,/g, ""))
+        });
+        break;
+      }
+      case "02": {
+        // Example: 02~Account Desc~QTY
+        const [, name, qty] = tokens;
+        result.holdings.push({
+          type: "02",
+          isin: "",
+          name,
+          quantity: Number(qty.replace(/,/g, "")),
+          value: 0
+        });
+        break;
+      }
+      case "03": {
+        // Example: 03~Total Value of Holding(Prices as on 09-DEC-2024) Rs.571893.98
+        const amountVal = tokens[1].match(/Rs\.([\d.]+)/);
+        if (amountVal) result.totalValue = Number(amountVal[1]);
 
-    if (parts[0] === "01") {
-      holdings.push({
-        type: parts[0],
-        isin: parts[1],
-        name: parts[2],
-        quantity: Number(parts[3].replace(/,/g, "")),
-        value: Number(parts[4].replace(/,/g, "")),
-      });
-    } else if (parts[0] === "03") {
-      // Example: "03~Total Value of Holding(Prices as on 09-DEC-2024) Rs.571893.98"
-      const amountVal = parts[1].match(/Rs\.([\d.]+)/);
-      if (amountVal) totalValue = Number(amountVal[1]);
-
-      const dateVal = parts[1].match(/Prices as on (\d{1,2}-[A-Z]{3}-\d{4})/);
-      if (dateVal) asOnDate = dateVal[1];
+        const dateVal = tokens[1].match(/Prices as on (\d{1,2}-[A-Z]{3}-\d{4})/);
+        if (dateVal) result.asOnDate = dateVal[1];
+      }
     }
   }
 
-  return {
-    dpClientId,
-    status,
-    holdings,
-    asOnDate,
-    totalValue,
-  };
+  return result;
 }
 
-export function parseNSDL(raw?: string, dpClientId?: string): Nsdl | null {
+export function parseNSDL(response?: string, dpClientId?: string): Nsdl | null {
 
-  if (!raw) {
+  if (!response) {
     return null;
   }
 
-  // Normalize line endings
-  let data = raw.replace(/\r\n/g, "\n");
+  // Normalize by removing carriage returns and collapsing spaces
+  let clean = response.replace(/\r/g, "").replace(/\s+/g, " ");
 
-  // Merge broken lines: if a line does not start with record type, join it to previous line
-  const recordStartPattern = /^(Y|01|03|04|05)~/;
-  const mergedLines: string[] = [];
+  // Split into records by regex lookahead on type markers (01,02,03,04,05)
+  const records = clean.split(/(?=(?:0[1-5])~)/).map(r => r.trim()).filter(Boolean);
 
-  for (const line of data.split("\n")) {
-    if (recordStartPattern.test(line)) {
-      mergedLines.push(line.trim());
-    } else if (mergedLines.length > 0) {
-      // continuation of previous line (e.g., company name)
-      mergedLines[mergedLines.length - 1] += " " + line.trim();
-    }
-  }
+  const result: Nsdl = {
+    dpClientId: dpClientId,
+    status: clean.startsWith("Y~") ? "Y" : "N",
+    holdings: []
+  };
 
-  const status = mergedLines[0].split("~")[0];
-  const holdings: any[] = [];
-  let totalValueInfo;
-  let lastCodDate;
-  let clientInfo;
+  for (const rec of records) {
+    const tokens = rec.replace(/<BR>/gi, " ").split("~").map(t => t.trim());
 
-  for (const line of mergedLines.slice(1)) {
-    const parts = line.split("~");
-
-    switch (parts[0]) {
+    switch (tokens[0]) {
       case "01": {
-        const isin = parts[1];
-        const name = parts[2].trim();
-        const beneficiary = parts[3];
-        const quantity = Number(parts[4]?.replace(/,/g, ""));
-        const value = Number(parts[5]?.replace(/,/g, ""));
-        holdings.push({ isin, name, beneficiary, quantity, value });
+        // Example: 01~ISIN~NAME~Beneficiary~QTY~VALUE
+        const [, isin, rawName, beneficiary, qty, val] = tokens;
+        result.holdings.push({
+          isin,
+          name: rawName.replace(/\s+/g, " ").trim(),
+          beneficiary,
+          quantity: Number(qty),
+          value: Number(val)
+        });
         break;
       }
-
+      case "02": {
+        // Account desc + qty (not in your sample, can extend later)
+        break;
+      }
       case "03": {
-        // Example: "03~Total Value of Holding(Prices as on 10-12-2024) Rs.1010749.26"
-        const match = parts[1].match(
-          /Prices as on ([0-9-]+)\) Rs\.?([\d,]+(\.\d+)?)/i
-        );
-        if (match) {
-          totalValueInfo = {
-            date: match[1],
-            totalValue: Number(match[2].replace(/,/g, "")),
-          };
-        }
+        // Example: 03~Total Value of Holding(Prices as on 10-12-2024) Rs.1010749.26
+        const text = tokens[1];
+        const dateMatch = text.match(/as on ([\d-]+)/i);
+        const date = dateMatch ? dateMatch[1] : "";
+        const valueMatch = text.match(/Rs\.([\d.]+)/i);
+        const totalValue = valueMatch ? Number(valueMatch[1]) : 0;
+
+        result.totalValueInfo = {
+          date,
+          totalValue
+        };
         break;
       }
-
       case "04": {
-        // Example: "04~Last COD Date : 16/03/2011 00:00:00"
-        const datePart = parts[1]?.split(":")[1]?.trim();
-        if (datePart) lastCodDate = datePart;
+        // Example: 04~Last COD Date : 16/03/2011 00:00:00
+        const lastCod = tokens[1].replace("Last COD Date :", "").trim();
+        result.lastCodDate = lastCod;
         break;
       }
-
       case "05": {
-        clientInfo = {
-          dpmClientId: parts[1],
-          name: parts[2],
-          address: [parts[3], parts[4], parts[5], parts[6], parts[7]],
-          clientStatus: parts[8],
-          bsdaFlag: parts[9],
-          rgessFlag: parts[10],
-          secondHolderName: parts[11] || "",
-          thirdHolderName: parts[12] || "",
-          clientType: parts[13],
-          clientSubtype: parts[14],
+        // Example: 05~clientId~name~addr1~...~status~bsda~rgess~secondHolder~thirdHolder~clientType~clientSubtype
+        const [
+          , dpmClientId,
+          name,
+          addr1, addr2, addr3, addr4, addr5,
+          clientStatus, bsdaFlag, rgessFlag,
+          secondHolderName, thirdHolderName,
+          clientType, clientSubtype
+        ] = tokens;
+
+        const address = [addr1, addr2, addr3, addr4, addr5].filter(Boolean);
+
+        result.clientInfo = {
+          dpmClientId,
+          name,
+          address,
+          clientStatus,
+          bsdaFlag,
+          rgessFlag,
+          secondHolderName,
+          thirdHolderName,
+          clientType,
+          clientSubtype
         };
         break;
       }
     }
   }
-
-  return {
-    dpClientId,
-    status,
-    holdings,
-    totalValueInfo,
-    lastCodDate,
-    clientInfo,
-  };
+  return result;
 }
 
 
